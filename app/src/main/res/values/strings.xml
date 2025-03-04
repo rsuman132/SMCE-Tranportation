@@ -1,0 +1,67 @@
+<resources>
+
+    <string name="app_name">SMCE Transport</string>
+
+    <!-- Walkthrough -->
+    <string name="welcome_text">Welcome</string>
+    <string name="login_to_continue">Login to continue</string>
+    <string name="student_login_text">Student Login</string>
+    <string name="staff_login_text">Staff Login</string>
+    <string name="in_charge_login_text">Incharge Login</string>
+    <string name="walk_through_desc">College bus transportation booking app</string>
+
+    <!-- Mobile Login -->
+    <string name="whats_your_phone_number">What\'s your \nphone number?</string>
+    <string name="mobile_login_desc">We will send you an One Time Password on this phone number</string>
+    <string name="phone_number_text">Phone number</string>
+    <string name="phone_number_validation_error_text">Enter a valid phone number</string>
+    <string name="get_otp_text">Get OTP</string>
+    <string name="indian_flag_emoji">🇮🇳</string>
+    
+    <!-- OTP Screen -->
+    <string name="verify_your_phone_number">Verify your phone number</string>
+    <string name="otp_login_desc">Enter the OTP send to %1$s</string>
+    <string name="resend_otp_in_placeholder_seconds">Resend OTP in %1$s \'s</string>
+    <string name="resend_otp_text">Resend OTP</string>
+    <string name="verify_text">Verify</string>
+
+    <!-- Signup -->
+    <string name="register_text">Register</string>
+    <string name="enter_your_personal_information">Enter your personal information</string>
+    <string name="enter_your_name">Enter your name</string>
+    <string name="enter_your_name_error">Enter a valid name</string>
+    <string name="enter_your_email">Enter your email</string>
+    <string name="enter_your_email_error">Enter a valid email address</string>
+    <string name="enter_your_college_id">Enter your college id</string>
+    <string name="enter_your_college_id_error">Enter a valid college id</string>
+    <string name="enter_your_staff_id">Enter your staff id</string>
+    <string name="enter_your_staff_id_error">Enter a valid staff id</string>
+    <string name="image_upload_error">Please upload your image</string>
+    <string name="select_your_department">Select your department</string>
+    <string name="select_your_department_error">Please select your department</string>
+    <string name="select_your_college_year">Select your college year</string>
+    <string name="select_your_college_year_error">Please select your college year</string>
+    <string name="upload_profile_photo">Upload profile photo</string>
+    <string name="upload_profile_photo_desc">Select Gallery to upload an image from your gallery or Camera to upload an image by capturing a new one.</string>
+    <string name="camera_text">Camera</string>
+    <string name="gallery_text">Gallery</string>
+
+
+    <!-- Dashboard -->
+    <string name="virtual_pass_management_text">Virtual Pass\nManagement</string>
+    <string name="view_pass">View Pass</string>
+    <string name="apply_new">Apply New</string>
+    <string name="cancel_pass">Cancel Request</string>
+    <string name="application_request">Application Request</string>
+    <string name="cancellation_request">Cancellation Request</string>
+    <string name="over_all_data">Overall Data</string>
+    <string name="category_management">Category Management</string>
+    <string name="department_management">Department</string>
+    <string name="year_management">Year</string>
+    <string name="bus_routes">Route</string>
+    <string name="bus_management">Bus</string>
+
+    <!-- Success Screen -->
+    <string name="your_request_send_successfully">Your Request Send Successfully</string>
+
+</resources>

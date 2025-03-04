@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "639415588614",
+    "project_id": "smce-transport",
+    "storage_bucket": "smce-transport.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:639415588614:android:6ce7b9a4d0876b6a113087",
+        "android_client_info": {
+          "package_name": "com.android.smcetransport.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsGKIDv2k0NWh8K8gC3vYWVVqFImg7Ieo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
