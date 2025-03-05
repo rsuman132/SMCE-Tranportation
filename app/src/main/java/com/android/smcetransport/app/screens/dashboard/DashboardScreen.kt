@@ -2,6 +2,7 @@ package com.android.smcetransport.app.screens.dashboard
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,309 +32,307 @@ import coil3.compose.AsyncImage
 import com.android.smcetransport.app.R
 import com.android.smcetransport.app.core.enum.LoginUserTypeEnum
 import com.android.smcetransport.app.ui.components.DashBoardCardItem
+import com.android.smcetransport.app.ui.components.InformationDialog
 import com.android.smcetransport.app.ui.theme.theme.theme.normalFont
 import com.android.smcetransport.app.ui.theme.theme.theme.semiBoldFont
 
 @Composable
 fun DashboardScreen(
     modifier: Modifier = Modifier,
-    loginUserTypeEnum: LoginUserTypeEnum?
+    loginUserTypeEnum: LoginUserTypeEnum?,
+    dashboardUIState: DashboardUIState,
+    onDashboardActionEvents: (DashboardActionEvents) -> Unit
 ) {
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+    Box(
+        modifier = modifier.fillMaxSize()
             .background(color = colorResource(R.color.white))
     ) {
-
-        Row(
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
-            Box(modifier = Modifier
-                .size(60.dp)
-                .clip(RoundedCornerShape(50))
-                .background(
-                    color = colorResource(R.color.app_main_color)
-                        .copy(alpha = 0.15f)
-                ),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "SR",
-                    fontSize = 30.sp,
-                    fontFamily = FontFamily(semiBoldFont),
-                    modifier = Modifier.align(Alignment.Center),
-                    textAlign = TextAlign.Center,
-                    color = colorResource(R.color.app_main_color)
-                )
-                AsyncImage(
-                    model = "https://www.shutterstock.com/image-photo/profile-picture-smiling-successful-young-260nw-2040223583.jpg",
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
 
-            Column(
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f)
-                    .padding(horizontal = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(6.dp)
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "Suman R",
-                    fontSize = 20.sp,
-                    color = colorResource(R.color.black),
-                    fontFamily = FontFamily(semiBoldFont)
-                )
-                Text(
-                    text = "SMCE123456",
-                    fontSize = 16.sp,
-                    fontFamily = FontFamily(normalFont),
-                    color = colorResource(R.color.black),
-                )
-            }
-
-            Box(modifier = Modifier
-                .size(40.dp)
-                .border(
-                    width = 1.dp,
-                    color = colorResource(R.color.light_white),
-                    shape = RoundedCornerShape(10)
-                )
-                .background(color = colorResource(R.color.white)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_logout),
-                    tint = colorResource(R.color.red_color),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(8.dp)
-                )
-            }
-
-        }
-
-        Text(
-            text = stringResource(R.string.virtual_pass_management_text),
-            modifier = Modifier.padding(all = 16.dp),
-            fontSize = 30.sp,
-            fontFamily = FontFamily(semiBoldFont),
-            lineHeight = 36.sp
-        )
-
-        if (loginUserTypeEnum != null) {
-            when (loginUserTypeEnum) {
-                LoginUserTypeEnum.STUDENT -> {
-                    Row(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 16.dp)) {
-
-                        DashBoardCardItem(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f)
-                                .padding(start = 16.dp, end = 8.dp),
-                            cardItemText = stringResource(R.string.view_pass),
-                            cardItemBgColor = colorResource(android.R.color.holo_orange_dark),
-                            cardItemIcon = painterResource(R.drawable.ic_hand_eye),
-                            onItemClick = {
-
-                            }
-                        )
-
-                        DashBoardCardItem(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f)
-                                .padding(start = 8.dp, end = 16.dp),
-                            cardItemText = stringResource(R.string.apply_new),
-                            cardItemBgColor = colorResource(android.R.color.holo_purple),
-                            cardItemIcon = painterResource(R.drawable.ic_schedule_send),
-                            onItemClick = {
-
-                            }
-                        )
-                    }
-
-                    DashBoardCardItem(
-                        modifier = Modifier
-                            .padding(vertical = 8.dp)
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        cardItemText = stringResource(R.string.cancel_pass),
-                        cardItemBgColor = colorResource(android.R.color.holo_blue_bright),
-                        cardItemIcon = painterResource(R.drawable.ic_contract_delete),
-                        onItemClick = {
-
-                        }
-                    )
-
-                }
-                LoginUserTypeEnum.STAFF -> {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 16.dp)
-                    ) {
-
-                        DashBoardCardItem(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f)
-                                .padding(start = 16.dp, end = 8.dp),
-                            cardItemText = stringResource(R.string.view_pass),
-                            cardItemBgColor = colorResource(android.R.color.holo_orange_dark),
-                            cardItemIcon = painterResource(R.drawable.ic_hand_eye),
-                            onItemClick = {
-
-                            }
-                        )
-
-                        DashBoardCardItem(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f)
-                                .padding(start = 8.dp, end = 16.dp),
-                            cardItemText = stringResource(R.string.apply_new),
-                            cardItemBgColor = colorResource(android.R.color.holo_purple),
-                            cardItemIcon = painterResource(R.drawable.ic_schedule_send),
-                            onItemClick = {
-
-                            }
-                        )
-                    }
-                }
-                LoginUserTypeEnum.INCHARGE -> {
-                    Row(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 16.dp)) {
-
-                        DashBoardCardItem(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f)
-                                .padding(start = 16.dp, end = 8.dp),
-                            cardItemText = stringResource(R.string.application_request),
-                            cardItemBgColor = colorResource(android.R.color.holo_orange_dark),
-                            cardItemIcon = painterResource(R.drawable.ic_tab_new),
-                            onItemClick = {
-
-                            }
-                        )
-
-                        DashBoardCardItem(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f)
-                                .padding(start = 8.dp, end = 16.dp),
-                            cardItemText = stringResource(R.string.cancellation_request),
-                            cardItemBgColor = colorResource(android.R.color.holo_purple),
-                            cardItemIcon = painterResource(R.drawable.ic_tab_close),
-                            onItemClick = {
-
-                            }
-                        )
-                    }
-
-                    DashBoardCardItem(
-                        modifier = Modifier
-                            .padding(top = 8.dp, bottom = 16.dp)
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        cardItemText = stringResource(R.string.over_all_data),
-                        cardItemBgColor = colorResource(android.R.color.holo_blue_bright),
-                        cardItemIcon = painterResource(R.drawable.ic_data_check),
-                        onItemClick = {
-
-                        }
-                    )
-
+                Box(modifier = Modifier
+                    .size(60.dp)
+                    .clip(RoundedCornerShape(50))
+                    .background(
+                        color = colorResource(R.color.app_main_color)
+                            .copy(alpha = 0.15f)
+                    ),
+                    contentAlignment = Alignment.Center
+                ) {
                     Text(
-                        text = stringResource(R.string.category_management),
-                        modifier = Modifier.padding(all = 16.dp),
+                        text = dashboardUIState.userName.take(2).uppercase(),
                         fontSize = 30.sp,
                         fontFamily = FontFamily(semiBoldFont),
-                        lineHeight = 36.sp
+                        modifier = Modifier.align(Alignment.Center),
+                        textAlign = TextAlign.Center,
+                        color = colorResource(R.color.app_main_color)
                     )
+                    AsyncImage(
+                        model = dashboardUIState.userAvatar,
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
 
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .padding(horizontal = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    Text(text = dashboardUIState.userName,
+                        fontSize = 20.sp,
+                        color = colorResource(R.color.black),
+                        fontFamily = FontFamily(semiBoldFont)
+                    )
+                    Text(
+                        text = dashboardUIState.userCollegeId,
+                        fontSize = 16.sp,
+                        fontFamily = FontFamily(normalFont),
+                        color = colorResource(R.color.black),
+                    )
+                }
 
-                    Row(
+                Box(modifier = Modifier
+                    .size(40.dp)
+                    .border(
+                        width = 1.dp,
+                        color = colorResource(R.color.light_white),
+                        shape = RoundedCornerShape(10)
+                    )
+                    .background(color = colorResource(R.color.white))
+                    .clickable {
+                        onDashboardActionEvents(DashboardActionEvents.OnLogoutDialogShowEvent(true))
+                    },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_logout),
+                        tint = colorResource(R.color.red_color),
+                        contentDescription = null,
                         modifier = Modifier
+                            .fillMaxSize()
+                            .padding(8.dp)
+                    )
+                }
+
+            }
+
+            Text(
+                text = stringResource(R.string.virtual_pass_management_text),
+                modifier = Modifier.padding(all = 16.dp),
+                fontSize = 30.sp,
+                fontFamily = FontFamily(semiBoldFont),
+                lineHeight = 36.sp
+            )
+
+            if (loginUserTypeEnum != null) {
+                when (loginUserTypeEnum) {
+                    LoginUserTypeEnum.STUDENT -> {
+                        Row(modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 16.dp)
-                    ) {
+                            .padding(vertical = 16.dp)) {
+
+                            DashBoardCardItem(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .weight(1f)
+                                    .padding(start = 16.dp, end = 8.dp),
+                                cardItemText = stringResource(R.string.view_pass),
+                                cardItemBgColor = colorResource(android.R.color.holo_orange_dark),
+                                cardItemIcon = painterResource(R.drawable.ic_hand_eye),
+                                onItemClick = {
+
+                                }
+                            )
+
+                            DashBoardCardItem(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .weight(1f)
+                                    .padding(start = 8.dp, end = 16.dp),
+                                cardItemText = stringResource(R.string.apply_new),
+                                cardItemBgColor = colorResource(android.R.color.holo_purple),
+                                cardItemIcon = painterResource(R.drawable.ic_schedule_send),
+                                onItemClick = {
+
+                                }
+                            )
+                        }
 
                         DashBoardCardItem(
                             modifier = Modifier
+                                .padding(vertical = 8.dp)
                                 .fillMaxWidth()
-                                .weight(1f)
-                                .padding(start = 16.dp, end = 8.dp),
-                            cardItemText = stringResource(R.string.department_management),
-                            cardItemBgColor = colorResource(android.R.color.holo_orange_dark),
-                            cardItemIcon = painterResource(R.drawable.ic_list_alt),
-                            onItemClick = {
-
-                            }
-                        )
-
-                        DashBoardCardItem(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f)
-                                .padding(start = 8.dp, end = 16.dp),
-                            cardItemText = stringResource(R.string.year_management),
+                                .padding(horizontal = 16.dp),
+                            cardItemText = stringResource(R.string.cancel_pass),
                             cardItemBgColor = colorResource(android.R.color.holo_blue_bright),
-                            cardItemIcon = painterResource(R.drawable.ic_format_list_numbered),
+                            cardItemIcon = painterResource(R.drawable.ic_contract_delete),
                             onItemClick = {
 
                             }
                         )
+
                     }
+                    LoginUserTypeEnum.STAFF -> {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 16.dp)
+                        ) {
 
+                            DashBoardCardItem(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .weight(1f)
+                                    .padding(start = 16.dp, end = 8.dp),
+                                cardItemText = stringResource(R.string.view_pass),
+                                cardItemBgColor = colorResource(android.R.color.holo_orange_dark),
+                                cardItemIcon = painterResource(R.drawable.ic_hand_eye),
+                                onItemClick = {
 
-                    Row(
-                        modifier = Modifier
+                                }
+                            )
+
+                            DashBoardCardItem(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .weight(1f)
+                                    .padding(start = 8.dp, end = 16.dp),
+                                cardItemText = stringResource(R.string.apply_new),
+                                cardItemBgColor = colorResource(android.R.color.holo_purple),
+                                cardItemIcon = painterResource(R.drawable.ic_schedule_send),
+                                onItemClick = {
+
+                                }
+                            )
+                        }
+                    }
+                    LoginUserTypeEnum.BUSINCHARGE -> {
+                        Row(modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 16.dp)
-                    ) {
+                            .padding(vertical = 16.dp)) {
+
+                            DashBoardCardItem(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .weight(1f)
+                                    .padding(start = 16.dp, end = 8.dp),
+                                cardItemText = stringResource(R.string.application_request),
+                                cardItemBgColor = colorResource(android.R.color.holo_orange_dark),
+                                cardItemIcon = painterResource(R.drawable.ic_tab_new),
+                                onItemClick = {
+
+                                }
+                            )
+
+                            DashBoardCardItem(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .weight(1f)
+                                    .padding(start = 8.dp, end = 16.dp),
+                                cardItemText = stringResource(R.string.cancellation_request),
+                                cardItemBgColor = colorResource(android.R.color.holo_purple),
+                                cardItemIcon = painterResource(R.drawable.ic_tab_close),
+                                onItemClick = {
+
+                                }
+                            )
+                        }
 
                         DashBoardCardItem(
                             modifier = Modifier
+                                .padding(top = 8.dp, bottom = 16.dp)
                                 .fillMaxWidth()
-                                .weight(1f)
-                                .padding(start = 16.dp, end = 8.dp),
-                            cardItemText = stringResource(R.string.bus_routes),
+                                .padding(horizontal = 16.dp),
+                            cardItemText = stringResource(R.string.over_all_data),
                             cardItemBgColor = colorResource(android.R.color.holo_blue_bright),
-                            cardItemIcon = painterResource(R.drawable.ic_route),
+                            cardItemIcon = painterResource(R.drawable.ic_data_check),
                             onItemClick = {
 
                             }
                         )
 
-                        DashBoardCardItem(
+                        Text(
+                            text = stringResource(R.string.category_management),
+                            modifier = Modifier.padding(all = 16.dp),
+                            fontSize = 30.sp,
+                            fontFamily = FontFamily(semiBoldFont),
+                            lineHeight = 36.sp
+                        )
+
+
+                        Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .weight(1f)
-                                .padding(start = 8.dp, end = 16.dp),
-                            cardItemText = stringResource(R.string.bus_management),
-                            cardItemBgColor = colorResource(android.R.color.holo_orange_dark),
-                            cardItemIcon = painterResource(R.drawable.ic_directions_bus),
-                            onItemClick = {
+                                .padding(vertical = 16.dp)
+                        ) {
 
-                            }
-                        )
+                            DashBoardCardItem(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .weight(1f)
+                                    .padding(start = 16.dp, end = 8.dp),
+                                cardItemText = stringResource(R.string.department_management),
+                                cardItemBgColor = colorResource(android.R.color.holo_orange_dark),
+                                cardItemIcon = painterResource(R.drawable.ic_list_alt),
+                                onItemClick = {
+
+                                }
+                            )
+
+                            DashBoardCardItem(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .weight(1f)
+                                    .padding(start = 8.dp, end = 16.dp),
+                                cardItemText = stringResource(R.string.bus_management),
+                                cardItemBgColor = colorResource(android.R.color.holo_blue_bright),
+                                cardItemIcon = painterResource(R.drawable.ic_directions_bus),
+                                onItemClick = {
+
+                                }
+                            )
+                        }
+
                     }
-
                 }
             }
+
         }
 
+        if (dashboardUIState.isShowLogoutDialog) {
+            InformationDialog(
+                isDismissible = true,
+                negativeBtnIcon = null,
+                positiveBtnIcon = null,
+                positiveBtnText = stringResource(R.string.yes_logout),
+                negativeBtnText = stringResource(R.string.cancel_text),
+                onPositiveBtnEvent = {
+
+                },
+                onNegativeBtnEvent = {
+                    onDashboardActionEvents(DashboardActionEvents.OnLogoutDialogShowEvent(false))
+                },
+                onDialogDismissEvent = {
+                    onDashboardActionEvents(DashboardActionEvents.OnLogoutDialogShowEvent(false))
+                },
+                dialogIcon = painterResource(R.drawable.ic_logout),
+                dialogDesc = stringResource(R.string.logout_desc),
+                dialogTitle = stringResource(R.string.logout_text)
+            )
+        }
     }
 
 }
@@ -345,6 +344,14 @@ fun DashboardScreen(
 fun PreviewDashboardScreen() {
     DashboardScreen(
         modifier = Modifier.fillMaxSize(),
-        loginUserTypeEnum = LoginUserTypeEnum.INCHARGE
+        loginUserTypeEnum = LoginUserTypeEnum.BUSINCHARGE,
+        dashboardUIState = DashboardUIState(
+            userName = "Suman",
+            userAvatar = "uhhh.jpg",
+            userCollegeId = "SMCE12345"
+        ),
+        onDashboardActionEvents = {
+
+        }
     )
 }

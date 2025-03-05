@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.android.smcetransport.app.screens.dashboard.DashboardActionEvents
 import com.android.smcetransport.app.screens.dashboard.DashboardScreen
 import com.android.smcetransport.app.screens.dashboard.DashboardViewModel
 import com.android.smcetransport.app.screens.mobile_login.MobileLoginActionEvent
@@ -19,9 +20,9 @@ import com.android.smcetransport.app.screens.otp_verification.presentation.OTPVe
 import com.android.smcetransport.app.screens.otp_verification.presentation.OTPVerificationScreen
 import com.android.smcetransport.app.screens.otp_verification.presentation.OTPVerificationViewModel
 import com.android.smcetransport.app.screens.request_success.RequestSuccessScreen
-import com.android.smcetransport.app.screens.signup.SignUpScreen
-import com.android.smcetransport.app.screens.signup.SignUpScreenActionEvent
-import com.android.smcetransport.app.screens.signup.SignUpViewModel
+import com.android.smcetransport.app.screens.signup.presentation.SignUpScreen
+import com.android.smcetransport.app.screens.signup.presentation.SignUpScreenActionEvent
+import com.android.smcetransport.app.screens.signup.presentation.SignUpViewModel
 import com.android.smcetransport.app.screens.splash.presenter.SplashActionEvent
 import com.android.smcetransport.app.screens.splash.presenter.SplashScreen
 import com.android.smcetransport.app.screens.splash.presenter.SplashScreenViewModel
@@ -50,11 +51,25 @@ fun SMCETransportApp(
                 modifier = modifier,
                 splashScreenUIState = splashScreenUIState,
                 onSplashScreenEvent = {
-                    if (it is SplashActionEvent.MoveToLoginScreen) {
-                        navController.navigate(WalkThroughRoute) {
-                            popUpTo(SplashScreenRoute) {
-                                inclusive = true
+                    when (it) {
+                        is SplashActionEvent.MoveToLoginScreen -> {
+                            navController.navigate(WalkThroughRoute) {
+                                popUpTo(SplashScreenRoute) {
+                                    inclusive = true
+                                }
                             }
+                        }
+
+                        is SplashActionEvent.MoveToHomeScreen -> {
+                            navController.navigate(DashboardRoute) {
+                                popUpTo(SplashScreenRoute) {
+                                    inclusive = true
+                                }
+                            }
+                        }
+
+                        is SplashActionEvent.OnErrorMessageUpdate -> {
+                            splashScreenViewModel.updateErrorMessage()
                         }
                     }
                 }
@@ -171,9 +186,17 @@ fun SMCETransportApp(
                         }
 
                         is OTPVerificationActionEvent.OnOtpSuccessEvent -> {
-                            navController.navigate(SignUpRoute) {
-                                popUpTo(MobileLoginRoute) {
-                                    inclusive = true
+                            if (otpVerificationUIState.userPhoneNumber != null) {
+                                navController.navigate(DashboardRoute) {
+                                    popUpTo(MobileLoginRoute) {
+                                        inclusive = true
+                                    }
+                                }
+                            } else {
+                                navController.navigate(SignUpRoute) {
+                                    popUpTo(MobileLoginRoute) {
+                                        inclusive = true
+                                    }
                                 }
                             }
                         }
@@ -186,6 +209,14 @@ fun SMCETransportApp(
         composable<SignUpRoute> {
             val signUpViewModel : SignUpViewModel = koinViewModel()
             val signUpUIState by signUpViewModel.signUpUIState.collectAsState()
+            val context = LocalContext.current
+
+            LaunchedEffect(Unit) {
+                signUpViewModel.errorMessage.collectLatest {
+                    context.showToast(it)
+                }
+            }
+
             SignUpScreen(
                 modifier = modifier,
                 signUpUIState = signUpUIState,
@@ -195,7 +226,7 @@ fun SMCETransportApp(
                             navController.navigateUp()
                         }
                         is SignUpScreenActionEvent.OnRegisterBtnActionEvent -> {
-                            // validation
+                            signUpViewModel.validation()
                         }
                         is SignUpScreenActionEvent.OnUserCollegeIdChangeEvent -> {
                             signUpViewModel.updateUserCollegeId(it.userCollegeId)
@@ -229,6 +260,18 @@ fun SMCETransportApp(
                         is SignUpScreenActionEvent.OnProfileImageUri -> {
                             signUpViewModel.updateProfileUri(it.imageUri)
                         }
+
+                        is SignUpScreenActionEvent.OnDepartmentApiEvent -> {
+                            signUpViewModel.getAllDepartment()
+                        }
+
+                        is SignUpScreenActionEvent.OnMoveToDashBoardEvent -> {
+                            navController.navigate(DashboardRoute) {
+                                popUpTo(SignUpRoute) {
+                                    inclusive = true
+                                }
+                            }
+                        }
                     }
                 }
             )
@@ -237,9 +280,18 @@ fun SMCETransportApp(
         // Dashboard
         composable<DashboardRoute> {
             val dashboardViewModel : DashboardViewModel = koinViewModel()
+            val dashboardUIState by dashboardViewModel.dashboardUIState.collectAsState()
             DashboardScreen(
                 modifier = modifier,
-                loginUserTypeEnum = dashboardViewModel.getLoginTypeEnum
+                loginUserTypeEnum = dashboardViewModel.getLoginTypeEnum,
+                dashboardUIState = dashboardUIState,
+                onDashboardActionEvents = {
+                    when(it) {
+                        is DashboardActionEvents.OnLogoutDialogShowEvent -> {
+                            dashboardViewModel.updateDialogShowStatus(it.show)
+                        }
+                    }
+                }
             )
         }
 

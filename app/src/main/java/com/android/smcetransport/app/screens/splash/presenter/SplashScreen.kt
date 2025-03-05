@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -24,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.android.smcetransport.app.R
 import com.android.smcetransport.app.ui.theme.theme.theme.boldFont
+import com.android.smcetransport.app.utils.ContextExtension.showToast
 
 @Composable
 fun SplashScreen(
@@ -31,10 +33,19 @@ fun SplashScreen(
     splashScreenUIState: SplashScreenUIState,
     onSplashScreenEvent : (SplashActionEvent) -> Unit
 ) {
+    val context = LocalContext.current
     val appName = stringResource(R.string.app_name)
     val configuration = LocalConfiguration.current
     if (!splashScreenUIState.isApiLoading) {
-        onSplashScreenEvent(SplashActionEvent.MoveToLoginScreen)
+        if (splashScreenUIState.userPhoneNumber != null) {
+            onSplashScreenEvent(SplashActionEvent.MoveToHomeScreen)
+        } else {
+            onSplashScreenEvent(SplashActionEvent.MoveToLoginScreen)
+        }
+    }
+    if (splashScreenUIState.errorMessage != null) {
+        context.showToast(splashScreenUIState.errorMessage)
+        onSplashScreenEvent(SplashActionEvent.OnErrorMessageUpdate)
     }
     Column(
         modifier = modifier

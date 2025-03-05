@@ -1,7 +1,8 @@
-package com.android.smcetransport.app.screens.signup
+package com.android.smcetransport.app.screens.signup.presentation
 
 import android.net.Uri
 import com.android.smcetransport.app.core.enum.LoginUserTypeEnum
+import com.android.smcetransport.app.ui.components.model.DropDownModel
 
 data class SignUpUIState(
     val loginUserTypeEnum: LoginUserTypeEnum? = null,
@@ -9,8 +10,8 @@ data class SignUpUIState(
     val isValidProfileImage: Boolean = true,
     val userName: String = "",
     val isValidUserName: Boolean = true,
-    val userEmail: String = "",
-    val isValidUserEmail: Boolean = true,
+    val userAddress: String = "",
+    val isValidUserAddress: Boolean = true,
     val userCollegeId: String = "",
     val isValidUserCollegeId: Boolean = true,
     val userDepartment : String = "",
@@ -22,5 +23,8 @@ data class SignUpUIState(
     val isDepartmentDropDownExpanded : Boolean = false,
     val isYearDropDownExpanded : Boolean = false,
     val isShowDialog : Boolean = false,
-    val isButtonLoading : Boolean = false
+    val isButtonLoading : Boolean = false,
+    val isApiSuccess : Boolean = false,
+    val departmentList : List<DropDownModel> = listOf(),
+    val isEnableDepartmentDropDown : Boolean = true
 )

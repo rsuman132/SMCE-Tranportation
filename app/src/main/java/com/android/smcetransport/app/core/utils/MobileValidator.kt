@@ -1,4 +1,4 @@
-package com.android.smcetransport.app.screens.mobile_login.utils
+package com.android.smcetransport.app.core.utils
 
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 

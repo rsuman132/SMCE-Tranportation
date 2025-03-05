@@ -1,4 +1,4 @@
-package com.android.smcetransport.app.screens.signup
+package com.android.smcetransport.app.screens.signup.presentation
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -16,6 +16,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,6 +39,7 @@ import androidx.core.content.FileProvider
 import com.android.smcetransport.app.BuildConfig
 import com.android.smcetransport.app.R
 import com.android.smcetransport.app.core.enum.LoginUserTypeEnum
+import com.android.smcetransport.app.core.enum.StudentYearEnum
 import com.android.smcetransport.app.screens.signup.utils.ContextExtension.createImageFile
 import com.android.smcetransport.app.ui.components.AppButton
 import com.android.smcetransport.app.ui.components.AppToolBar
@@ -68,6 +70,21 @@ fun SignUpScreen(
 
     val galleryLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
         onSignUpScreenActionEvent(SignUpScreenActionEvent.OnProfileImageUri(it))
+    }
+
+
+    LaunchedEffect(signUpUIState.isApiSuccess) {
+        onSignUpScreenActionEvent(SignUpScreenActionEvent.OnMoveToDashBoardEvent)
+    }
+
+    val yearDropDownList = remember {
+        StudentYearEnum.entries.mapIndexed { index, studentYearEnum ->
+            DropDownModel(
+                dropDownId = "${index + 1}",
+                dropDownText = studentYearEnum.name,
+                dropDownTypeEnum = DropDownTypeEnum.YEAR
+            )
+        }
     }
 
     Box(modifier = modifier
@@ -136,7 +153,8 @@ fun SignUpScreen(
                         fontFamily = FontFamily(normalFont),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 8.dp)
+                            .padding(bottom = 8.dp),
+                        textAlign = TextAlign.Center
                     )
                 }
                 CommonTextField(
@@ -159,57 +177,40 @@ fun SignUpScreen(
                 CommonDropDown(
                     modifier = modifier
                         .fillMaxWidth()
-                        .padding(vertical = 8.dp),
+                        .padding(vertical = 4.dp),
                     etValue = signUpUIState.userDepartment,
                     onEtValueChangeListener = {},
                     etPlaceHolder = stringResource(R.string.select_your_department),
                     isShowError = !signUpUIState.isValidUserDepartment,
                     etErrorText = stringResource(R.string.select_your_department_error),
-                    dropDownList = listOf(
-                        DropDownModel(
-                            dropDownId = "1",
-                            dropDownText = "Mechanic",
-                            dropDownTypeEnum = DropDownTypeEnum.DEPARTMENT
-                        ),
-                        DropDownModel(
-                            dropDownId = "2",
-                            dropDownText = "EEE",
-                            dropDownTypeEnum = DropDownTypeEnum.DEPARTMENT
-                        )
-                    ),
+                    dropDownList = signUpUIState.departmentList,
                     isDropDownExpanded = signUpUIState.isDepartmentDropDownExpanded,
+                    isEnable = signUpUIState.isEnableDepartmentDropDown,
                     onDropDownClickAndExpandedState = { dropDownModel, isExpanded ->
-                        onSignUpScreenActionEvent(
-                            SignUpScreenActionEvent.OnUserDepartmentChangeEvent(
-                                departmentText = dropDownModel?.dropDownText,
-                                departmentId = dropDownModel?.dropDownId,
-                                isExpanded = isExpanded
+                        if (signUpUIState.departmentList.isNotEmpty()) {
+                            onSignUpScreenActionEvent(
+                                SignUpScreenActionEvent.OnUserDepartmentChangeEvent(
+                                    departmentText = dropDownModel?.dropDownText,
+                                    departmentId = dropDownModel?.dropDownId,
+                                    isExpanded = isExpanded
+                                )
                             )
-                        )
+                        } else {
+                            onSignUpScreenActionEvent(SignUpScreenActionEvent.OnDepartmentApiEvent)
+                        }
                     }
                 )
                 if (signUpUIState.loginUserTypeEnum == LoginUserTypeEnum.STUDENT) {
                     CommonDropDown(
                         modifier = modifier
                             .fillMaxWidth()
-                            .padding(top = 4.dp, bottom = 8.dp),
+                            .padding(vertical = 4.dp),
                         etValue = signUpUIState.userCollegeYear,
                         onEtValueChangeListener = {},
                         etPlaceHolder = stringResource(R.string.select_your_college_year),
                         isShowError = !signUpUIState.isValidUserCollegeYear,
                         etErrorText = stringResource(R.string.select_your_college_year_error),
-                        dropDownList = listOf(
-                            DropDownModel(
-                                dropDownId = "1",
-                                dropDownText = "1 Year",
-                                dropDownTypeEnum = DropDownTypeEnum.YEAR
-                            ),
-                            DropDownModel(
-                                dropDownId = "2",
-                                dropDownText = "2 Year",
-                                dropDownTypeEnum = DropDownTypeEnum.YEAR
-                            )
-                        ),
+                        dropDownList = yearDropDownList,
                         isDropDownExpanded = signUpUIState.isYearDropDownExpanded,
                         onDropDownClickAndExpandedState = { dropDownModel, isExpanded ->
                             onSignUpScreenActionEvent(
@@ -223,37 +224,52 @@ fun SignUpScreen(
                     )
                 }
                 CommonTextField(
-                    etValue = signUpUIState.userEmail,
+                    etValue = signUpUIState.userAddress,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 16.dp),
                     onEtValueChangeListener = {
                         onSignUpScreenActionEvent(SignUpScreenActionEvent.OnUserEmailChangeEvent(it))
                     },
-                    etPlaceHolder = stringResource(R.string.enter_your_email),
-                    isShowError = !signUpUIState.isValidUserEmail,
-                    etErrorText = stringResource(R.string.enter_your_email_error),
+                    etPlaceHolder = stringResource(R.string.enter_your_address),
+                    isShowError = !signUpUIState.isValidUserAddress,
+                    etErrorText = stringResource(R.string.enter_your_address_error),
                     keyboardOptions = KeyboardOptions(
-                        capitalization = KeyboardCapitalization.None,
-                        keyboardType = KeyboardType.Email,
+                        capitalization = KeyboardCapitalization.Words,
+                        keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next
-                    )
+                    ),
+                    singleLine = false
                 )
+                val idEtPlaceholder = if (signUpUIState.loginUserTypeEnum == LoginUserTypeEnum.STUDENT) {
+                    stringResource(R.string.enter_your_college_id)
+                } else {
+                    stringResource(R.string.enter_your_staff_id)
+                }
+                val idEtErrorText = if (signUpUIState.loginUserTypeEnum == LoginUserTypeEnum.STUDENT) {
+                    stringResource(R.string.enter_your_college_id_error)
+                } else {
+                    stringResource(R.string.enter_your_staff_id_error)
+                }
                 CommonTextField(
                     etValue = signUpUIState.userCollegeId,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 16.dp),
                     onEtValueChangeListener = {
-                        onSignUpScreenActionEvent(SignUpScreenActionEvent.OnUserCollegeIdChangeEvent(it))
+                        onSignUpScreenActionEvent(
+                            SignUpScreenActionEvent.OnUserCollegeIdChangeEvent(
+                                it
+                            )
+                        )
                     },
-                    etPlaceHolder = stringResource(R.string.enter_your_college_id),
+                    etPlaceHolder = idEtPlaceholder,
                     isShowError = !signUpUIState.isValidUserCollegeId,
-                    etErrorText = stringResource(R.string.enter_your_college_id_error),
+                    etErrorText = idEtErrorText,
                     keyboardOptions = KeyboardOptions(
-                        capitalization = KeyboardCapitalization.None,
-                        keyboardType = KeyboardType.Email,
-                        imeAction = ImeAction.Next
+                        capitalization = KeyboardCapitalization.Characters,
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done
                     )
                 )
             }

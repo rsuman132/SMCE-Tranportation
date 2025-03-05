@@ -14,5 +14,6 @@ data class OTPVerificationUIState(
     val otpProcessEnum : OTPProcessEnum? = null,
     val isButtonLoading : Boolean = false,
     val verificationId : String? = null,
-    val token: PhoneAuthProvider.ForceResendingToken? = null
+    val token: PhoneAuthProvider.ForceResendingToken? = null,
+    val userPhoneNumber : String? = null
 )

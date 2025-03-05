@@ -141,7 +141,7 @@ fun WalkThroughScreen(
             buttonClickEvent = {
                 onWalkThroughActionEvent(
                     WalkThroughActionEvent.OnLoginButtonClickEvent(
-                        LoginUserTypeEnum.INCHARGE
+                        LoginUserTypeEnum.BUSINCHARGE
                     )
                 )
             }

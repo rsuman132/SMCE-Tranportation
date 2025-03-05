@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import com.android.smcetransport.app.R
 import com.android.smcetransport.app.ui.theme.theme.theme.mediumFont
 import com.android.smcetransport.app.ui.theme.theme.theme.normalFont
+import kotlin.math.sin
 
 @Composable
 fun CommonTextField(
@@ -36,6 +37,7 @@ fun CommonTextField(
     etPlaceHolder : String,
     isShowError : Boolean = false,
     etErrorText : String,
+    singleLine : Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions(
         keyboardType = KeyboardType.Text,
         imeAction = ImeAction.Default
@@ -73,6 +75,7 @@ fun CommonTextField(
                     fontSize = 20.sp,
                     fontFamily = FontFamily(mediumFont)
                 ),
+                singleLine = singleLine,
                 cursorBrush = SolidColor(colorResource(R.color.app_main_color)),
                 decorationBox = { innerTextField ->
                     Box(

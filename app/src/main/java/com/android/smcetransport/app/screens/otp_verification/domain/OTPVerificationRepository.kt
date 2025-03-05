@@ -1,6 +1,6 @@
 package com.android.smcetransport.app.screens.otp_verification.domain
 
-import com.android.smcetransport.app.core.api.NetworkResult
+import com.android.smcetransport.app.core.network.NetworkResult
 import com.google.firebase.auth.PhoneAuthCredential
 import kotlinx.coroutines.flow.Flow
 

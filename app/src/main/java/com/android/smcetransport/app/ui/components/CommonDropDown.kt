@@ -49,7 +49,8 @@ fun CommonDropDown(
     etErrorText : String,
     dropDownList : List<DropDownModel> = listOf(),
     isDropDownExpanded : Boolean = false,
-    onDropDownClickAndExpandedState : (DropDownModel?, Boolean) -> Unit
+    onDropDownClickAndExpandedState : (DropDownModel?, Boolean) -> Unit,
+    isEnable : Boolean = true
 ) {
 
     val roundedShape = RoundedCornerShape(10)
@@ -65,7 +66,7 @@ fun CommonDropDown(
                         color = colorResource(R.color.light_white),
                         shape = roundedShape
                     )
-                    .clickable {
+                    .clickable(enabled = isEnable) {
                         onDropDownClickAndExpandedState(null, true)
                     }
                     .padding(
@@ -153,7 +154,8 @@ fun CommonDropDown(
                             text = it.dropDownText,
                             fontSize = 20.sp,
                             color = colorResource(R.color.black),
-                            fontFamily = FontFamily(normalFont)
+                            fontFamily = FontFamily(normalFont),
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
                         )
                     },
                     modifier = Modifier

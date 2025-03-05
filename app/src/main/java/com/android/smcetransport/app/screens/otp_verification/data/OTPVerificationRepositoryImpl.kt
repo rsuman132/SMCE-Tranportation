@@ -1,6 +1,6 @@
 package com.android.smcetransport.app.screens.otp_verification.data
 
-import com.android.smcetransport.app.core.api.NetworkResult
+import com.android.smcetransport.app.core.network.NetworkResult
 import com.android.smcetransport.app.screens.otp_verification.domain.OTPVerificationRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential

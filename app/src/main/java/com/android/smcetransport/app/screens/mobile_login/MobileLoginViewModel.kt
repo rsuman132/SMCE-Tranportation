@@ -1,7 +1,7 @@
 package com.android.smcetransport.app.screens.mobile_login
 
 import androidx.lifecycle.ViewModel
-import com.android.smcetransport.app.screens.mobile_login.utils.MobileValidator
+import com.android.smcetransport.app.core.utils.MobileValidator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 

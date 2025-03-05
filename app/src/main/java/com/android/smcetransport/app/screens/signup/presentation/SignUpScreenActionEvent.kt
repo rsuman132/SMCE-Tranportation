@@ -1,4 +1,4 @@
-package com.android.smcetransport.app.screens.signup
+package com.android.smcetransport.app.screens.signup.presentation
 
 import android.net.Uri
 
@@ -39,5 +39,9 @@ sealed class SignUpScreenActionEvent {
     data class OnProfileImageUri(
         val imageUri : Uri?
     ) : SignUpScreenActionEvent()
+
+    data object OnDepartmentApiEvent : SignUpScreenActionEvent()
+
+    data object OnMoveToDashBoardEvent : SignUpScreenActionEvent()
 
 }

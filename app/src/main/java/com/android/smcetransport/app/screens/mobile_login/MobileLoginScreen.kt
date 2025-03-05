@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.android.smcetransport.app.R
-import com.android.smcetransport.app.screens.mobile_login.utils.MobileValidator
+import com.android.smcetransport.app.core.utils.MobileValidator
 import com.android.smcetransport.app.ui.components.AppButton
 import com.android.smcetransport.app.ui.components.AppToolBar
 import com.android.smcetransport.app.ui.components.PhoneNumberTextField

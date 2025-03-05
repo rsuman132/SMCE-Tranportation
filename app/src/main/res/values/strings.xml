@@ -30,8 +30,8 @@
     <string name="enter_your_personal_information">Enter your personal information</string>
     <string name="enter_your_name">Enter your name</string>
     <string name="enter_your_name_error">Enter a valid name</string>
-    <string name="enter_your_email">Enter your email</string>
-    <string name="enter_your_email_error">Enter a valid email address</string>
+    <string name="enter_your_address">Enter your address</string>
+    <string name="enter_your_address_error">Enter a valid address</string>
     <string name="enter_your_college_id">Enter your college id</string>
     <string name="enter_your_college_id_error">Enter a valid college id</string>
     <string name="enter_your_staff_id">Enter your staff id</string>
@@ -60,6 +60,10 @@
     <string name="year_management">Year</string>
     <string name="bus_routes">Route</string>
     <string name="bus_management">Bus</string>
+    <string name="logout_text">Logout</string>
+    <string name="logout_desc">Are you sure want to logout from this application?</string>
+    <string name="yes_logout">Yes, Logout</string>
+    <string name="cancel_text">Cancel</string>
 
     <!-- Success Screen -->
     <string name="your_request_send_successfully">Your Request Send Successfully</string>
