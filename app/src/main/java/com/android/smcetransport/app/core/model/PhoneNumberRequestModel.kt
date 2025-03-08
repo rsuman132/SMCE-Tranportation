@@ -1,10 +1,10 @@
-package com.android.smcetransport.app.screens.splash.data
+package com.android.smcetransport.app.core.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SplashRequestModel(
+data class PhoneNumberRequestModel(
     @SerialName("phone")
     val phone : String?
 )

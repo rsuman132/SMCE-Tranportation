@@ -12,10 +12,19 @@ data class BaseApiClass<T : Any?>(
     val code: Int = 0,
     @SerialName("status")
     val status: StatusModel = StatusModel(),
-    @JsonNames("student", "staff", "departments")
+    @JsonNames(
+        "student",
+        "staff",
+        "departments",
+        "busincharge",
+        "students",
+        "staffs",
+        "busincharges",
+        "student_bus_requests",
+        "staff_bus_requests",
+        "buses"
+)
     val data: T? = null,
     @SerialName("message")
-    val message: String? = null,
-    @SerialName("token")
-    val token: TokenModel? = null,
+    val message: String? = null
 )

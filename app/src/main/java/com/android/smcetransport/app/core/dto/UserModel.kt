@@ -9,21 +9,21 @@ import kotlinx.serialization.json.JsonNames
 @Serializable
 data class UserModel(
     @SerialName("id")
-    val id: String?,
+    val id: String? = null,
     @SerialName("name")
-    val name: String?,
+    val name: String? = null,
     @JsonNames("college_id", "staff_id")
-    val collegeOrStaffId: String?,
+    val collegeOrStaffId: String? = null,
     @SerialName("department_id")
-    val departmentId: String?,
+    val departmentId: String? = null,
     @SerialName("department")
-    val departmentModel: DepartmentModel?,
+    val departmentModel: DepartmentModel? = null,
     @SerialName("year")
-    val year: String?,
+    val year: String?= null,
     @SerialName("phone")
-    val phone: String?,
+    val phone: String? = null,
     @SerialName("address")
-    val address: String?,
+    val address: String? = null,
     @SerialName("image_url")
-    val imageUrl: String?
+    val imageUrl: String? = null
 )

@@ -57,8 +57,6 @@
     <string name="over_all_data">Overall Data</string>
     <string name="category_management">Category Management</string>
     <string name="department_management">Department</string>
-    <string name="year_management">Year</string>
-    <string name="bus_routes">Route</string>
     <string name="bus_management">Bus</string>
     <string name="logout_text">Logout</string>
     <string name="logout_desc">Are you sure want to logout from this application?</string>
@@ -67,5 +65,28 @@
 
     <!-- Success Screen -->
     <string name="your_request_send_successfully">Your Request Send Successfully</string>
+
+    <!-- Department Screen -->
+    <string name="departments_text">Departments</string>
+    <string name="no_department_added">Oops, No department added yet.</string>
+    <string name="enter_department_name">Enter department name</string>
+    <string name="enter_department_name_error">Enter valid department name</string>
+    <string name="enter_department_code">Enter department code</string>
+    <string name="enter_department_code_error">Enter valid department code</string>
+    <string name="add_department">Add department</string>
+
+    <!-- Bus And Route Screen -->
+    <string name="bus_list_text">Bus List</string>
+    <string name="add_bus_text">Add bus</string>
+    <string name="enter_bus_number_text">Enter bus number</string>
+    <string name="enter_bus_number_error_text">Enter valid bus number</string>
+    <string name="enter_register_number_text">Enter register number</string>
+    <string name="enter_register_number_error_text">Enter valid register number</string>
+    <string name="enter_starting_point_text">Enter starting point</string>
+    <string name="enter_starting_point_error_text">Enter valid starting point</string>
+    <string name="enter_bus_route_text">Enter bus route</string>
+    <string name="enter_bus_route_error_text">Enter valid bus route</string>
+    <string name="enter_driver_name_text">Enter driver name</string>
+    <string name="enter_driver_name_error_text">Enter valid driver name</string>
 
 </resources>

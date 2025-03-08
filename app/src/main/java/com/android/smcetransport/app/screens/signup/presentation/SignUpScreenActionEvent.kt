@@ -42,6 +42,4 @@ sealed class SignUpScreenActionEvent {
 
     data object OnDepartmentApiEvent : SignUpScreenActionEvent()
 
-    data object OnMoveToDashBoardEvent : SignUpScreenActionEvent()
-
 }

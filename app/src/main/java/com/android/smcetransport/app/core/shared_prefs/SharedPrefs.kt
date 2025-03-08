@@ -15,15 +15,23 @@ class SharedPrefs(context : Context) {
         private const val USER_MODEL_KEY = "user_model_type"
     }
 
+    private val json = Json {
+        prettyPrint = true
+        isLenient = true
+        useAlternativeNames = true
+        ignoreUnknownKeys = true
+        encodeDefaults = false
+    }
+
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences(
         SHARED_PREFS_NAME,
         Context.MODE_PRIVATE
     )
     private val editor: SharedPreferences.Editor = sharedPreferences.edit()
 
-    fun setLoginType(loginUserTypeEnum: LoginUserTypeEnum) {
+    fun setLoginType(loginUserTypeEnum: LoginUserTypeEnum?) {
         editor.apply {
-            putString(LOGIN_USER_TYPE_KEY, loginUserTypeEnum.name)
+            putString(LOGIN_USER_TYPE_KEY, loginUserTypeEnum?.name)
             apply()
         }
     }
@@ -36,7 +44,7 @@ class SharedPrefs(context : Context) {
 
     fun setUserModel(userModel: UserModel?) {
         val userModelString = if(userModel != null) {
-            Json.encodeToString(
+            json.encodeToString(
                 value = userModel,
                 serializer = serializer()
             )
@@ -53,7 +61,7 @@ class SharedPrefs(context : Context) {
     fun getUserModel() : UserModel? {
         val userModelString = sharedPreferences.getString(USER_MODEL_KEY, null)
         return if (userModelString != null) {
-            Json.decodeFromString<UserModel>(userModelString)
+            json.decodeFromString<UserModel>(userModelString)
         } else {
             null
         }

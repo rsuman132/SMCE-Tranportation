@@ -1,4 +1,4 @@
-package com.android.smcetransport.app.screens.dashboard
+package com.android.smcetransport.app.screens.dashboard.presentation
 
 data class DashboardUIState(
     val userName : String = "",

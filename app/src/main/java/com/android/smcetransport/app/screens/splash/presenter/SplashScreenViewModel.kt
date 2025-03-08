@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.android.smcetransport.app.core.network.NetworkResult
 import com.android.smcetransport.app.core.shared_prefs.SharedPrefs
 import com.android.smcetransport.app.core.utils.StringExtensions.removeCountryCodeFromPhone
-import com.android.smcetransport.app.screens.splash.data.SplashRequestModel
+import com.android.smcetransport.app.core.model.PhoneNumberRequestModel
 import com.android.smcetransport.app.screens.splash.domain.SplashUseCase
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
@@ -35,10 +35,10 @@ class SplashScreenViewModel(
             val userPhoneNumber = firebaseAuth.currentUser?.phoneNumber?.removeCountryCodeFromPhone()
             val loginUserTypeEnum = sharedPrefs.getLoginType()
             if (!userPhoneNumber.isNullOrEmpty() && loginUserTypeEnum != null) {
-                val splashRequestModel = SplashRequestModel(
+                val phoneNumberRequestModel = PhoneNumberRequestModel(
                     phone = userPhoneNumber
                 )
-                splashUseCase.getUserProfile(splashRequestModel).collectLatest { networkResult ->
+                splashUseCase.getUserProfile(phoneNumberRequestModel).collectLatest { networkResult ->
                     when(networkResult) {
                         is NetworkResult.Loading -> {
                             splashScreenUIState.update {

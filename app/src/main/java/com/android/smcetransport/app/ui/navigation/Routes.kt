@@ -22,6 +22,14 @@ data object SignUpRoute
 @Serializable
 data object DashboardRoute
 
-
 @Serializable
 data object SuccessScreenRoute
+
+@Serializable
+data object DepartmentScreenRoute
+
+@Serializable
+data object BusListScreenRoute
+
+@Serializable
+data object BusAddScreenRoute

@@ -72,11 +72,6 @@ fun SignUpScreen(
         onSignUpScreenActionEvent(SignUpScreenActionEvent.OnProfileImageUri(it))
     }
 
-
-    LaunchedEffect(signUpUIState.isApiSuccess) {
-        onSignUpScreenActionEvent(SignUpScreenActionEvent.OnMoveToDashBoardEvent)
-    }
-
     val yearDropDownList = remember {
         StudentYearEnum.entries.mapIndexed { index, studentYearEnum ->
             DropDownModel(

@@ -1,26 +1,11 @@
 package com.android.smcetransport.app.core.network
 
-import com.android.smcetransport.app.core.shared_prefs.SharedPrefs
+object ApiUrls{
 
-class ApiUrls(
-    private val sharedPrefs: SharedPrefs
-) {
-
-    companion object {
-        private const val BASE_URL = "http://192.168.43.245:8000"
-    }
-
-    private val loginUserTypeEnum get() =
-        sharedPrefs.getLoginType()?.name?.lowercase()
-
-
-    val userLoginUrl = "$BASE_URL/api/$loginUserTypeEnum/login"
-    val userRegisterUrl = "$BASE_URL/api/$loginUserTypeEnum/register"
-    val getAllDepartments = "$BASE_URL/api/department/getAll"
-    val userLogoutUrl = "$BASE_URL/api/$loginUserTypeEnum/logout"
-
-
-
-
+    const val BASE_URL = "http://192.168.176.107:8000"
+    const val CREATE_DEPARTMENT = "$BASE_URL/api/department/create"
+    const val CREATE_BUS = "$BASE_URL/api/bus/create"
+    const val GET_ALL_BUS = "$BASE_URL/api/bus/getAll"
+    const val GET_ALL_DEPARTMENT = "$BASE_URL/api/department/getAll"
 
 }

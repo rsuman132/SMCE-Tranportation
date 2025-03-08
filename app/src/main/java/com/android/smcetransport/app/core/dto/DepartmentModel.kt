@@ -6,9 +6,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class DepartmentModel(
     @SerialName("id")
-    val id : String?,
+    val id : String? = null,
     @SerialName("department_name")
-    val departmentName : String?,
+    val departmentName : String? = null,
     @SerialName("department_code")
-    val departmentCode : String?
+    val departmentCode : String? = null
 )

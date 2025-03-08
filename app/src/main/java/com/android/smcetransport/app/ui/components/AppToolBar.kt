@@ -2,7 +2,6 @@ package com.android.smcetransport.app.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
@@ -11,13 +10,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,6 +39,8 @@ fun AppToolBar(
     toolBarStartIcon: Painter = painterResource(R.drawable.ic_arrow_back),
     toolBarTextAndIconTintColor : Color = colorResource(R.color.black),
     isShowLoading : Boolean = false,
+    firstRightIcon : Painter? = null,
+    onFirstRightIconClick : (() -> Unit)? = null,
     onToolBarStartIconClick : () -> Unit
 ) {
     val trackColor = if (isShowLoading)
@@ -78,7 +76,23 @@ fun AppToolBar(
                 fontSize = 18.sp,
                 modifier = Modifier.fillMaxWidth()
                     .padding(horizontal = 8.dp)
+                    .weight(1f)
             )
+
+            if (firstRightIcon != null) {
+                Icon(
+                    painter = firstRightIcon,
+                    contentDescription = null,
+                    modifier = Modifier.size(45.dp)
+                        .aspectRatio(1f)
+                        .clip(RoundedCornerShape(50))
+                        .clickable {
+                            onFirstRightIconClick?.invoke()
+                        }
+                        .padding(5.dp),
+                    tint = toolBarTextAndIconTintColor
+                )
+            }
         }
         LinearProgressIndicator(
             modifier = Modifier.fillMaxWidth()

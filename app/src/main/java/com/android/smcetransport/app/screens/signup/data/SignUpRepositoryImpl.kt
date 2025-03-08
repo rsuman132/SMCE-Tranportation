@@ -7,6 +7,7 @@ import com.android.smcetransport.app.core.dto.DepartmentModel
 import com.android.smcetransport.app.core.dto.UserModel
 import com.android.smcetransport.app.core.network.ApiExecution
 import com.android.smcetransport.app.core.network.ApiUrls
+import com.android.smcetransport.app.core.network.ApiUrls.BASE_URL
 import com.android.smcetransport.app.core.network.KtorHttpClient
 import com.android.smcetransport.app.core.network.NetworkResult
 import com.android.smcetransport.app.core.shared_prefs.SharedPrefs
@@ -25,7 +26,6 @@ import kotlinx.serialization.ExperimentalSerializationApi
 class SignUpRepositoryImpl(
     private val sharedPrefs: SharedPrefs,
     private val ktorHttpClient : KtorHttpClient,
-    private val apiUrls: ApiUrls,
     private val apiExecution: ApiExecution,
     private val context : Context
 ) : SignUpRepository {
@@ -58,8 +58,10 @@ class SignUpRepositoryImpl(
     override suspend fun registerUser(
         signUpRequestModel: SignUpRequestModel
     ): Flow<NetworkResult<BaseApiClass<UserModel>>> {
+        val loginTypeEnum = sharedPrefs.getLoginType()?.name?.lowercase()
+        val userRegisterUrl = "$BASE_URL/api/$loginTypeEnum/register"
         val httpStatement = ktorHttpClient.httpClientAndroid().preparePost {
-            url(apiUrls.userRegisterUrl)
+            url(userRegisterUrl)
             setBody(signUpRequestModel)
         }
         return apiExecution.executeApi<UserModel>(httpStatement)
@@ -68,7 +70,7 @@ class SignUpRepositoryImpl(
     @ExperimentalSerializationApi
     override suspend fun getAllDepartment(): Flow<NetworkResult<BaseApiClass<List<DepartmentModel>>>> {
         val httpStatement = ktorHttpClient.httpClientAndroid().prepareGet {
-            url(apiUrls.getAllDepartments)
+            url(ApiUrls.GET_ALL_DEPARTMENT)
         }
         return apiExecution.executeApi<List<DepartmentModel>>(httpStatement)
     }

@@ -10,9 +10,20 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.android.smcetransport.app.screens.dashboard.DashboardActionEvents
-import com.android.smcetransport.app.screens.dashboard.DashboardScreen
-import com.android.smcetransport.app.screens.dashboard.DashboardViewModel
+import com.android.smcetransport.app.screens.bus_managment.presentation.AddBusActionEvent
+import com.android.smcetransport.app.screens.bus_managment.presentation.AddBusScreen
+import com.android.smcetransport.app.screens.bus_managment.presentation.AddBusUIState
+import com.android.smcetransport.app.screens.bus_managment.presentation.AddBusViewModel
+import com.android.smcetransport.app.screens.bus_managment.presentation.BusListActionEvent
+import com.android.smcetransport.app.screens.bus_managment.presentation.BusListScreen
+import com.android.smcetransport.app.screens.bus_managment.presentation.BusListUIState
+import com.android.smcetransport.app.screens.bus_managment.presentation.BusListViewModel
+import com.android.smcetransport.app.screens.dashboard.presentation.DashboardActionEvents
+import com.android.smcetransport.app.screens.dashboard.presentation.DashboardScreen
+import com.android.smcetransport.app.screens.dashboard.presentation.DashboardViewModel
+import com.android.smcetransport.app.screens.department.presentation.DepartmentActionEvent
+import com.android.smcetransport.app.screens.department.presentation.DepartmentListScreen
+import com.android.smcetransport.app.screens.department.presentation.DepartmentListViewModel
 import com.android.smcetransport.app.screens.mobile_login.MobileLoginActionEvent
 import com.android.smcetransport.app.screens.mobile_login.MobileLoginScreen
 import com.android.smcetransport.app.screens.mobile_login.MobileLoginViewModel
@@ -39,6 +50,7 @@ fun SMCETransportApp(
     modifier: Modifier = Modifier
 ) {
     val navController = rememberNavController()
+    val context = LocalContext.current
     NavHost(
         navController = navController,
         startDestination = SplashScreenRoute
@@ -129,7 +141,6 @@ fun SMCETransportApp(
             val otpVerificationRoute = backStackEntry.toRoute<OTPVerificationRoute>()
             val otpVerificationViewModel : OTPVerificationViewModel = koinViewModel()
             val otpVerificationUIState by otpVerificationViewModel.otpVerificationUIState.collectAsState()
-            val context = LocalContext.current
 
             LaunchedEffect(Unit) {
                 otpVerificationViewModel.errorMessageShow.collectLatest {
@@ -209,11 +220,20 @@ fun SMCETransportApp(
         composable<SignUpRoute> {
             val signUpViewModel : SignUpViewModel = koinViewModel()
             val signUpUIState by signUpViewModel.signUpUIState.collectAsState()
-            val context = LocalContext.current
 
             LaunchedEffect(Unit) {
                 signUpViewModel.errorMessage.collectLatest {
                     context.showToast(it)
+                }
+            }
+
+            LaunchedEffect(Unit) {
+                signUpViewModel.apiSuccessChannel.collectLatest {
+                    navController.navigate(DashboardRoute) {
+                        popUpTo(WalkThroughRoute) {
+                            inclusive = true
+                        }
+                    }
                 }
             }
 
@@ -264,14 +284,6 @@ fun SMCETransportApp(
                         is SignUpScreenActionEvent.OnDepartmentApiEvent -> {
                             signUpViewModel.getAllDepartment()
                         }
-
-                        is SignUpScreenActionEvent.OnMoveToDashBoardEvent -> {
-                            navController.navigate(DashboardRoute) {
-                                popUpTo(SignUpRoute) {
-                                    inclusive = true
-                                }
-                            }
-                        }
                     }
                 }
             )
@@ -281,6 +293,21 @@ fun SMCETransportApp(
         composable<DashboardRoute> {
             val dashboardViewModel : DashboardViewModel = koinViewModel()
             val dashboardUIState by dashboardViewModel.dashboardUIState.collectAsState()
+            LaunchedEffect(Unit) {
+                dashboardViewModel.errorMessage.collectLatest {
+                    context.showToast(it)
+                }
+            }
+            LaunchedEffect(Unit) {
+                dashboardViewModel.logoutSuccessEvent.collectLatest {
+                    navController.navigate(WalkThroughRoute) {
+                        popUpTo(DashboardRoute) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                }
+            }
             DashboardScreen(
                 modifier = modifier,
                 loginUserTypeEnum = dashboardViewModel.getLoginTypeEnum,
@@ -290,9 +317,161 @@ fun SMCETransportApp(
                         is DashboardActionEvents.OnLogoutDialogShowEvent -> {
                             dashboardViewModel.updateDialogShowStatus(it.show)
                         }
+
+                        is DashboardActionEvents.OnLogoutTriggerEvent -> {
+                            dashboardViewModel.updateDialogShowStatus(false)
+                            dashboardViewModel.logoutUser()
+                        }
+
+                        is DashboardActionEvents.OnManageDepartmentClickEvent -> {
+                            navController.navigate(DepartmentScreenRoute)
+                        }
+
+                        is DashboardActionEvents.OnManageBusClickEvent -> {
+                            navController.navigate(BusListScreenRoute)
+                        }
                     }
                 }
             )
+        }
+
+        // Department
+        composable<DepartmentScreenRoute> {
+            val departmentListViewModel : DepartmentListViewModel = koinViewModel()
+            val departmentListUIState by departmentListViewModel.departmentListUIState.collectAsState()
+
+            LaunchedEffect(Unit) {
+                departmentListViewModel.errorMessage.collectLatest {
+                    context.showToast(it)
+                }
+            }
+
+            DepartmentListScreen(
+                modifier = modifier,
+                departmentListUIState = departmentListUIState,
+                onDepartmentActionEvent = {
+                    when(it) {
+                        is DepartmentActionEvent.OnBackPressEvent -> {
+                            navController.navigateUp()
+                        }
+                        is DepartmentActionEvent.OnAddDepartmentEvent -> {
+                            departmentListViewModel.updateDepartmentDialog(true)
+                        }
+                        is DepartmentActionEvent.OnAddDepartmentEventInDialog -> {
+                            departmentListViewModel.addDepartmentValidation()
+                        }
+                        is DepartmentActionEvent.OnDepartmentCodeUpdate -> {
+                            departmentListViewModel.updateDepartmentCode(it.code)
+                        }
+                        is DepartmentActionEvent.OnDepartmentNameUpdate -> {
+                            departmentListViewModel.updateDepartmentName(it.name)
+                        }
+                        is DepartmentActionEvent.OnAddDepartmentDialogDismiss -> {
+                            departmentListViewModel.updateDepartmentDialog(false)
+                        }
+                    }
+                }
+            )
+        }
+
+        // Bus List
+        composable<BusListScreenRoute> {
+
+            val busListViewModel : BusListViewModel = koinViewModel()
+            val busListUIState by busListViewModel.busListUIState.collectAsState()
+
+            LaunchedEffect(Unit) {
+                val saveStateHandle = navController.currentBackStackEntry?.savedStateHandle
+                saveStateHandle?.get<Boolean?>("refresh")?.let {
+                    if (it) {
+                        busListViewModel.getAllBusList()
+                    }
+                }
+            }
+
+            LaunchedEffect(Unit) {
+                busListViewModel.errorMessage.collectLatest {
+                    context.showToast(it)
+                }
+            }
+
+            BusListScreen(
+                modifier = modifier,
+                busListUIState = busListUIState,
+                onBusListActionEvent = {
+                    when(it) {
+                        is BusListActionEvent.OnAddBusEvent -> {
+                            navController.navigate(BusAddScreenRoute)
+                        }
+                        is BusListActionEvent.OnBackPressEvent -> {
+                            navController.navigateUp()
+                        }
+                    }
+                }
+            )
+        }
+
+        // Add Bus
+        composable<BusAddScreenRoute> {
+
+            val addBusViewModel : AddBusViewModel = koinViewModel()
+            val addBusUIState by addBusViewModel.addBusUIState.collectAsState()
+
+            LaunchedEffect(Unit) {
+                addBusViewModel.errorMessage.collectLatest {
+                    context.showToast(it)
+                }
+            }
+
+            LaunchedEffect(Unit) {
+                addBusViewModel.refreshState.collectLatest { isRefresh ->
+                    if (isRefresh != null) {
+                        navController.previousBackStackEntry?.savedStateHandle?.set(
+                            "refresh",
+                            isRefresh
+                        )
+                    }
+                }
+            }
+
+            AddBusScreen(
+                modifier = modifier,
+                addBusUIState = addBusUIState,
+                onAddBusActionEvent = {
+                    when(it) {
+                        is AddBusActionEvent.OnAddBusBtnEvent -> {
+                            addBusViewModel.addBusValidation()
+                        }
+                        is AddBusActionEvent.OnBackPressEvent -> {
+                            navController.navigateUp()
+                        }
+
+                        is AddBusActionEvent.OnBusTextFieldUpdateEvent -> {
+                            if (it.busNo != null) {
+                                addBusViewModel.updateBusNo(it.busNo)
+                                return@AddBusScreen
+                            }
+                            if (it.busRegisterNo != null) {
+                                addBusViewModel.updateBusRegisterNo(it.busRegisterNo)
+                                return@AddBusScreen
+                            }
+                            if (it.busRoute != null) {
+                                addBusViewModel.updateBusRoute(it.busRoute)
+                                return@AddBusScreen
+                            }
+                            if (it.busStartingPoint != null) {
+                                addBusViewModel.updateBusStartingPoint(it.busStartingPoint)
+                                return@AddBusScreen
+                            }
+                            if (it.busDriverName != null) {
+                                addBusViewModel.updateDriverName(it.busDriverName)
+                                return@AddBusScreen
+                            }
+                        }
+                    }
+                }
+            )
+
         }
 
         // Success Message Screen

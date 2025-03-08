@@ -38,6 +38,9 @@ class SignUpViewModel(
     private val _errorMessage = Channel<String?>()
     val errorMessage = _errorMessage.receiveAsFlow()
 
+    private val _apiSuccessChannel = Channel<Unit>()
+    val apiSuccessChannel = _apiSuccessChannel.receiveAsFlow()
+
     fun updateUserName(userName : String) {
         signUpUIState.update {
             it.copy(
@@ -220,15 +223,11 @@ class SignUpViewModel(
 
                 is NetworkResult.Success -> {
                     val userModel = networkResult.data?.data
+                    sharedPrefs.setUserModel(userModel)
+                    showButtonLoading(false)
                     if (userModel != null) {
-                        signUpUIState.update {
-                            it.copy(
-                                isButtonLoading = false,
-                                isApiSuccess = true
-                            )
-                        }
+                        _apiSuccessChannel.send(Unit)
                     } else {
-                        showButtonLoading(false)
                         _errorMessage.send("User Already registered")
 
                     }

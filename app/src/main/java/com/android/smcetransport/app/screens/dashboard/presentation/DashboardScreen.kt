@@ -1,4 +1,4 @@
-package com.android.smcetransport.app.screens.dashboard
+package com.android.smcetransport.app.screens.dashboard.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -80,7 +81,8 @@ fun DashboardScreen(
                     AsyncImage(
                         model = dashboardUIState.userAvatar,
                         contentDescription = null,
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
                     )
                 }
 
@@ -288,7 +290,7 @@ fun DashboardScreen(
                                 cardItemBgColor = colorResource(android.R.color.holo_orange_dark),
                                 cardItemIcon = painterResource(R.drawable.ic_list_alt),
                                 onItemClick = {
-
+                                    onDashboardActionEvents(DashboardActionEvents.OnManageDepartmentClickEvent)
                                 }
                             )
 
@@ -301,7 +303,7 @@ fun DashboardScreen(
                                 cardItemBgColor = colorResource(android.R.color.holo_blue_bright),
                                 cardItemIcon = painterResource(R.drawable.ic_directions_bus),
                                 onItemClick = {
-
+                                    onDashboardActionEvents(DashboardActionEvents.OnManageBusClickEvent)
                                 }
                             )
                         }
@@ -320,7 +322,7 @@ fun DashboardScreen(
                 positiveBtnText = stringResource(R.string.yes_logout),
                 negativeBtnText = stringResource(R.string.cancel_text),
                 onPositiveBtnEvent = {
-
+                    onDashboardActionEvents(DashboardActionEvents.OnLogoutTriggerEvent)
                 },
                 onNegativeBtnEvent = {
                     onDashboardActionEvents(DashboardActionEvents.OnLogoutDialogShowEvent(false))

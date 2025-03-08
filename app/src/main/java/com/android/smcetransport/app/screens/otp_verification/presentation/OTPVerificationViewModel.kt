@@ -4,11 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.smcetransport.app.core.network.NetworkResult
 import com.android.smcetransport.app.core.shared_prefs.SharedPrefs
-import com.android.smcetransport.app.core.utils.MobileValidator
 import com.android.smcetransport.app.core.utils.StringExtensions.removeCountryCodeFromPhone
 import com.android.smcetransport.app.screens.otp_verification.domain.OTPVerificationUseCase
 import com.android.smcetransport.app.screens.otp_verification.utils.OTPProcessEnum
-import com.android.smcetransport.app.screens.splash.data.SplashRequestModel
+import com.android.smcetransport.app.core.model.PhoneNumberRequestModel
 import com.android.smcetransport.app.screens.splash.domain.SplashUseCase
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
@@ -25,7 +24,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.serialization.ExperimentalSerializationApi
 
 class OTPVerificationViewModel(
@@ -135,7 +133,15 @@ class OTPVerificationViewModel(
                     }
                     is NetworkResult.Success -> {
                         val phoneNumberWithoutPlusCode = networkResult.data?.removeCountryCodeFromPhone()
-                        hitProfileApi(phoneNumber = phoneNumberWithoutPlusCode)
+                        val loginUserTypeEnum = sharedPrefs.getLoginType()
+                        if (loginUserTypeEnum != null) {
+                            hitProfileApi(phoneNumber = phoneNumberWithoutPlusCode)
+                        } else {
+                            networkResult.message?.let {
+                                _errorMessageShow.send("Something went wrong")
+                            }
+                            updateButtonLoading(false)
+                        }
                     }
                 }
             }
@@ -145,7 +151,7 @@ class OTPVerificationViewModel(
 
     @OptIn(ExperimentalSerializationApi::class)
     suspend fun hitProfileApi(phoneNumber : String?) {
-        splashUseCase.getUserProfile(SplashRequestModel(phone = phoneNumber)).collectLatest { networkResult ->
+        splashUseCase.getUserProfile(PhoneNumberRequestModel(phone = phoneNumber)).collectLatest { networkResult ->
             when(networkResult) {
                 is NetworkResult.Loading -> {
 
