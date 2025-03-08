@@ -6,10 +6,10 @@ import com.android.smcetransport.app.core.enum.LoginUserTypeEnum
 import com.android.smcetransport.app.core.enum.RequestStatusEnum
 import com.android.smcetransport.app.core.network.NetworkResult
 import com.android.smcetransport.app.core.shared_prefs.SharedPrefs
+import com.android.smcetransport.app.core.utils.CommonLogout
 import com.android.smcetransport.app.screens.dashboard.data.CancelRequestRequestModel
 import com.android.smcetransport.app.screens.dashboard.data.SendRequestingRequestModel
 import com.android.smcetransport.app.screens.dashboard.domain.DashboardUseCase
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,13 +21,12 @@ import kotlinx.serialization.ExperimentalSerializationApi
 
 class DashboardViewModel(
     private val sharedPrefs: SharedPrefs,
-    private val dashboardUseCase: DashboardUseCase
+    private val dashboardUseCase: DashboardUseCase,
+    private val commonLogout: CommonLogout
 ) : ViewModel() {
 
     var dashboardUIState: MutableStateFlow<DashboardUIState> = MutableStateFlow(DashboardUIState())
         private set
-
-    private val firebaseAuth = FirebaseAuth.getInstance()
 
     private val _errorMessage = Channel<String?>()
     val errorMessage = _errorMessage.receiveAsFlow()
@@ -70,9 +69,7 @@ class DashboardViewModel(
 
     fun logoutUser() {
         viewModelScope.launch(IO) {
-            firebaseAuth.signOut()
-            sharedPrefs.setUserModel(null)
-            sharedPrefs.setLoginType(null)
+            commonLogout.logout()
             _logoutSuccessEvent.send(Unit)
         }
     }
@@ -247,25 +244,11 @@ class DashboardViewModel(
             (it.status == RequestStatusEnum.REQUESTED.name || it.status == RequestStatusEnum.ACCEPTED.name)
         }
 
+
+    fun setBusRequestStatus(
+        requestStatusEnum: RequestStatusEnum
+    ) {
+        sharedPrefs.setRequestStateType(requestStatusEnum)
+    }
+
 }
-
-
-/*  val phoneNumberRequestModel = PhoneNumberRequestModel(
-                phone = firebaseAuth.currentUser?.phoneNumber?.removeCountryCodeFromPhone()
-            )
-            dashboardUseCase.logoutUser(phoneNumberRequestModel).collectLatest { networkResult ->
-                when(networkResult) {
-                    is NetworkResult.Loading -> {
-                        updateDialogShowStatus(false)
-                    }
-                    is NetworkResult.Error -> {
-                        _errorMessage.send(networkResult.message)
-                    }
-                    is NetworkResult.Success -> {
-                        firebaseAuth.signOut()
-                        sharedPrefs.setUserModel(null)
-                        sharedPrefs.setLoginType(null)
-                        _logoutSuccessEvent.send(Unit)
-                    }
-                }
-            }  */

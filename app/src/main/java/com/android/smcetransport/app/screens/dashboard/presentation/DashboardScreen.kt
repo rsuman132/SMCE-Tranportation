@@ -40,6 +40,7 @@ import androidx.compose.ui.window.DialogProperties
 import coil3.compose.AsyncImage
 import com.android.smcetransport.app.R
 import com.android.smcetransport.app.core.enum.LoginUserTypeEnum
+import com.android.smcetransport.app.core.enum.RequestStatusEnum
 import com.android.smcetransport.app.ui.components.AppButton
 import com.android.smcetransport.app.ui.components.CommonTextField
 import com.android.smcetransport.app.ui.components.DashBoardCardItem
@@ -245,11 +246,13 @@ fun DashboardScreen(
                                     .fillMaxSize()
                                     .weight(1f)
                                     .padding(start = 16.dp, end = 8.dp),
-                                cardItemText = stringResource(R.string.acceptance_request),
+                                cardItemText = stringResource(R.string.application_request),
                                 cardItemBgColor = colorResource(android.R.color.holo_orange_dark),
                                 cardItemIcon = painterResource(R.drawable.ic_add_box),
                                 onItemClick = {
-
+                                    onDashboardActionEvents(DashboardActionEvents.OnBusStatusRequestClickEvent(
+                                        requestStatusEnum = RequestStatusEnum.REQUESTED
+                                    ))
                                 }
                             )
 
@@ -262,7 +265,9 @@ fun DashboardScreen(
                                 cardItemBgColor = colorResource(android.R.color.holo_green_light),
                                 cardItemIcon = painterResource(R.drawable.ic_tab_new),
                                 onItemClick = {
-
+                                    onDashboardActionEvents(DashboardActionEvents.OnBusStatusRequestClickEvent(
+                                        requestStatusEnum = RequestStatusEnum.ACCEPTED
+                                    ))
                                 }
                             )
                         }
@@ -281,7 +286,9 @@ fun DashboardScreen(
                                 cardItemBgColor = colorResource(android.R.color.holo_purple),
                                 cardItemIcon = painterResource(R.drawable.ic_tab_close),
                                 onItemClick = {
-
+                                    onDashboardActionEvents(DashboardActionEvents.OnBusStatusRequestClickEvent(
+                                        requestStatusEnum = RequestStatusEnum.ACCEPTED
+                                    ))
                                 }
                             )
 

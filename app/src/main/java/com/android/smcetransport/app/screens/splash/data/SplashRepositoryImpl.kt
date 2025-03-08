@@ -1,8 +1,7 @@
 package com.android.smcetransport.app.screens.splash.data
 
 import com.android.smcetransport.app.core.dto.BaseApiClass
-import com.android.smcetransport.app.core.dto.RequestPassModel
-import com.android.smcetransport.app.core.dto.StatusModel
+import com.android.smcetransport.app.core.dto.BusRequestModel
 import com.android.smcetransport.app.core.dto.UserModel
 import com.android.smcetransport.app.core.enum.LoginUserTypeEnum
 import com.android.smcetransport.app.core.model.PhoneNumberRequestModel
@@ -43,23 +42,23 @@ class SplashRepositoryImpl(
     @ExperimentalSerializationApi
     override suspend fun busRequestsByStatusAndRequesterId(
         statusAndIdRequestModel: StatusAndIdRequestModel
-    ): Flow<NetworkResult<BaseApiClass<List<RequestPassModel>?>>> {
+    ): Flow<NetworkResult<BaseApiClass<List<BusRequestModel>?>>> {
         when (sharedPrefs.getLoginType()) {
             LoginUserTypeEnum.STUDENT -> {
-                val apiUrl = ApiUrls.GET_BY_STATUS_STUDENT_ID
+                val apiUrl = ApiUrls.GET_BUS_REQUEST_BY_STATUS_STUDENT_ID
                 val httpStatement = ktorHttpClient.httpClientAndroid().preparePost {
                     url(apiUrl)
                     setBody(statusAndIdRequestModel)
                 }
-                return apiExecution.executeApi<List<RequestPassModel>?>(httpStatement)
+                return apiExecution.executeApi<List<BusRequestModel>?>(httpStatement)
             }
             LoginUserTypeEnum.STAFF -> {
-                val apiUrl = ApiUrls.GET_BY_STATUS_STAFF_ID
+                val apiUrl = ApiUrls.GET_BUS_REQUEST_BY_STATUS_STAFF_ID
                 val httpStatement = ktorHttpClient.httpClientAndroid().preparePost {
                     url(apiUrl)
                     setBody(statusAndIdRequestModel)
                 }
-                return apiExecution.executeApi<List<RequestPassModel>?>(httpStatement)
+                return apiExecution.executeApi<List<BusRequestModel>?>(httpStatement)
             }
             else -> {
                 return flow {

@@ -18,6 +18,9 @@ import com.android.smcetransport.app.screens.bus_managment.presentation.AddBusVi
 import com.android.smcetransport.app.screens.bus_managment.presentation.BusListActionEvent
 import com.android.smcetransport.app.screens.bus_managment.presentation.BusListScreen
 import com.android.smcetransport.app.screens.bus_managment.presentation.BusListViewModel
+import com.android.smcetransport.app.screens.bus_request_status.presentation.BusRequestPageActionEvent
+import com.android.smcetransport.app.screens.bus_request_status.presentation.BusRequestStatusScreen
+import com.android.smcetransport.app.screens.bus_request_status.presentation.BusRequestStatusViewModel
 import com.android.smcetransport.app.screens.dashboard.presentation.DashboardActionEvents
 import com.android.smcetransport.app.screens.dashboard.presentation.DashboardScreen
 import com.android.smcetransport.app.screens.dashboard.presentation.DashboardViewModel
@@ -418,6 +421,11 @@ fun SMCETransportApp(
                                 )
                             }
                         }
+
+                        is DashboardActionEvents.OnBusStatusRequestClickEvent -> {
+                            dashboardViewModel.setBusRequestStatus(it.requestStatusEnum)
+                            navController.navigate(BusRequestStatusRoute)
+                        }
                     }
                 }
             )
@@ -583,6 +591,33 @@ fun SMCETransportApp(
                 viewPassUiState = viewPassUiState,
                 onBackPressEvent = {
                     navController.navigateUp()
+                }
+            )
+        }
+
+        // Bus Request Status Screen
+        composable<BusRequestStatusRoute> {
+            val busRequestStatusViewModel : BusRequestStatusViewModel = koinViewModel()
+            val busRequestStatusUIState by busRequestStatusViewModel.busRequestStatusUIState.collectAsState()
+
+            LaunchedEffect(Unit) {
+                busRequestStatusViewModel.errorMessage.collectLatest {
+                    context.showToast(it)
+                }
+            }
+
+            BusRequestStatusScreen(
+                modifier = modifier,
+                busRequestStatusUIState = busRequestStatusUIState,
+                onBusRequestPageActionEvent = {
+                    when(it) {
+                        is BusRequestPageActionEvent.OnBackPressEvent -> {
+                            navController.navigateUp()
+                        }
+                        is BusRequestPageActionEvent.OnTabChangeEvent -> {
+                            busRequestStatusViewModel.updateSelectedPos(it.selectedPos)
+                        }
+                    }
                 }
             )
         }

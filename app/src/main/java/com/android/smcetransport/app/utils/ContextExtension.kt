@@ -3,7 +3,7 @@ package com.android.smcetransport.app.utils
 import android.content.Context
 import android.widget.Toast
 import com.android.smcetransport.app.R
-import com.android.smcetransport.app.core.dto.RequestPassModel
+import com.android.smcetransport.app.core.dto.BusRequestModel
 import com.android.smcetransport.app.core.enum.RequestStatusEnum
 import com.android.smcetransport.app.ui.components.model.TitleDescModel
 
@@ -19,7 +19,7 @@ object ContextExtension {
 
 
     fun Context.getPassList(
-        data: RequestPassModel?
+        data: BusRequestModel?
     ): List<TitleDescModel> {
         return if (data != null) {
             val notSetText = resources.getString(R.string.not_set_text)

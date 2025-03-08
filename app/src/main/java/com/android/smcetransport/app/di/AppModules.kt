@@ -3,11 +3,16 @@ package com.android.smcetransport.app.di
 import com.android.smcetransport.app.core.network.ApiExecution
 import com.android.smcetransport.app.core.network.KtorHttpClient
 import com.android.smcetransport.app.core.shared_prefs.SharedPrefs
+import com.android.smcetransport.app.core.utils.CommonLogout
 import com.android.smcetransport.app.screens.bus_managment.data.BusRepositoryImpl
 import com.android.smcetransport.app.screens.bus_managment.domain.BusRepository
 import com.android.smcetransport.app.screens.bus_managment.domain.BusUseCase
 import com.android.smcetransport.app.screens.bus_managment.presentation.AddBusViewModel
 import com.android.smcetransport.app.screens.bus_managment.presentation.BusListViewModel
+import com.android.smcetransport.app.screens.bus_request_status.data.BusRequestStatusRepositoryImpl
+import com.android.smcetransport.app.screens.bus_request_status.domain.BusRequestStatusRepository
+import com.android.smcetransport.app.screens.bus_request_status.domain.BusRequestStatusUseCase
+import com.android.smcetransport.app.screens.bus_request_status.presentation.BusRequestStatusViewModel
 import com.android.smcetransport.app.screens.dashboard.data.DashboardRepositoryImpl
 import com.android.smcetransport.app.screens.dashboard.domain.DashboardRepository
 import com.android.smcetransport.app.screens.dashboard.domain.DashboardUseCase
@@ -63,6 +68,9 @@ val appModule = module {
     singleOf(::ViewPassRepositoryImpl) {
         bind<ViewPassRepository>()
     }
+    singleOf(::BusRequestStatusRepositoryImpl) {
+        bind<BusRequestStatusRepository>()
+    }
 
     factoryOf(::SharedPrefs)
     factoryOf(::OTPVerificationUseCase)
@@ -74,6 +82,8 @@ val appModule = module {
     factoryOf(::DepartmentUseCase)
     factoryOf(::BusUseCase)
     factoryOf(::ViewPassRepositoryUseCase)
+    factoryOf(::BusRequestStatusUseCase)
+    factoryOf(::CommonLogout)
 
     viewModelOf(::SplashScreenViewModel)
     viewModelOf(::WalkThroughViewModel)
@@ -85,4 +95,5 @@ val appModule = module {
     viewModelOf(::BusListViewModel)
     viewModelOf(::AddBusViewModel)
     viewModelOf(::ViewPassViewModel)
+    viewModelOf(::BusRequestStatusViewModel)
 }

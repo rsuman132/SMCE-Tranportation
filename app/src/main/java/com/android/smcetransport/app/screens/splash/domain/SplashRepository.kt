@@ -1,7 +1,7 @@
 package com.android.smcetransport.app.screens.splash.domain
 
 import com.android.smcetransport.app.core.dto.BaseApiClass
-import com.android.smcetransport.app.core.dto.RequestPassModel
+import com.android.smcetransport.app.core.dto.BusRequestModel
 import com.android.smcetransport.app.core.dto.UserModel
 import com.android.smcetransport.app.core.network.NetworkResult
 import com.android.smcetransport.app.core.model.PhoneNumberRequestModel
@@ -19,6 +19,6 @@ interface SplashRepository {
     @OptIn(ExperimentalSerializationApi::class)
     suspend fun busRequestsByStatusAndRequesterId(
         statusAndIdRequestModel : StatusAndIdRequestModel
-    ) : Flow<NetworkResult<BaseApiClass<List<RequestPassModel>?>>>
+    ) : Flow<NetworkResult<BaseApiClass<List<BusRequestModel>?>>>
 
 }

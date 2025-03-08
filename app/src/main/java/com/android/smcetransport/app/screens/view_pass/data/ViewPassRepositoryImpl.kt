@@ -1,7 +1,7 @@
 package com.android.smcetransport.app.screens.view_pass.data
 
 import com.android.smcetransport.app.core.dto.BaseApiClass
-import com.android.smcetransport.app.core.dto.RequestPassModel
+import com.android.smcetransport.app.core.dto.BusRequestModel
 import com.android.smcetransport.app.core.network.ApiExecution
 import com.android.smcetransport.app.core.network.ApiUrls.BASE_URL
 import com.android.smcetransport.app.core.network.KtorHttpClient
@@ -22,12 +22,12 @@ class ViewPassRepositoryImpl(
     @ExperimentalSerializationApi
     override suspend fun getBusRequestById(
         passId : String?
-    ): Flow<NetworkResult<BaseApiClass<List<RequestPassModel>>>> {
+    ): Flow<NetworkResult<BaseApiClass<List<BusRequestModel>>>> {
         val loginUserTypeEnum = sharedPrefs.getLoginType()?.name?.lowercase()
         val apiUrl = "$BASE_URL/api/${loginUserTypeEnum}busrequest/getById/$passId"
         val httpStatement = ktorHttpClient.httpClientAndroid().prepareGet {
             url(apiUrl)
         }
-        return apiExecution.executeApi<List<RequestPassModel>>(httpStatement)
+        return apiExecution.executeApi<List<BusRequestModel>>(httpStatement)
     }
 }

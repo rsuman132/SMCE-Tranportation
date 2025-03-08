@@ -1,5 +1,7 @@
 package com.android.smcetransport.app.screens.dashboard.presentation
 
+import com.android.smcetransport.app.core.enum.RequestStatusEnum
+
 sealed class DashboardActionEvents {
 
     data class OnLogoutDialogShowEvent(
@@ -34,4 +36,8 @@ sealed class DashboardActionEvents {
     ) : DashboardActionEvents()
 
     data object OnViewPassClickEvent : DashboardActionEvents()
+
+    data class OnBusStatusRequestClickEvent(
+        val requestStatusEnum: RequestStatusEnum
+    ) : DashboardActionEvents()
 }

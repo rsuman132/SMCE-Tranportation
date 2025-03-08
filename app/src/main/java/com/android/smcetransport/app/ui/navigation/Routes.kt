@@ -38,3 +38,6 @@ data object BusAddScreenRoute
 
 @Serializable
 data object ViewPassRoute
+
+@Serializable
+data object BusRequestStatusRoute

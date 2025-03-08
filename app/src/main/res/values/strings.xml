@@ -120,6 +120,11 @@
     <string name="requested_text">Requested</string>
     <string name="accepted_text">Accepted</string>
     <string name="cancelled_text">Cancelled</string>
+    <string name="no_bus_request_found">Oops, No bus request items found</string>
+    <string name="declare_amount">Declare amount</string>
+    <string name="approve_text">Approve</string>
+    <string name="cancel_confirmation_title">Are you sure want to cancel this bus request?</string>
+    <string name="cancel_confirmation_desc">By entering cancel reason and tap cancel button to confirm the cancellation for the request</string>
 
 
 </resources>

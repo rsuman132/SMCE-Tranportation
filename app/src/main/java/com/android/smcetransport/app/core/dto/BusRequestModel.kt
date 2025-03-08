@@ -7,7 +7,7 @@ import kotlinx.serialization.json.JsonNames
 
 @OptIn(ExperimentalSerializationApi::class)
 @Serializable
-data class RequestPassModel(
+data class BusRequestModel(
     @SerialName("id")
     val id : String? = null,
     @JsonNames("student_id", "staff_id")

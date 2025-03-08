@@ -2,9 +2,10 @@ package com.android.smcetransport.app.core.shared_prefs
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.android.smcetransport.app.core.dto.RequestPassModel
+import com.android.smcetransport.app.core.dto.BusRequestModel
 import com.android.smcetransport.app.core.dto.UserModel
 import com.android.smcetransport.app.core.enum.LoginUserTypeEnum
+import com.android.smcetransport.app.core.enum.RequestStatusEnum
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 
@@ -15,6 +16,7 @@ class SharedPrefs(context : Context) {
         private const val LOGIN_USER_TYPE_KEY = "login_user_type"
         private const val USER_MODEL_KEY = "user_model_type"
         private const val REQUESTING_PASS_LIST_KEY = "requesting_pass_list"
+        private const val REQUESTING_STATUS_KEY = "requesting_status_key"
     }
 
     private val json = Json {
@@ -71,7 +73,7 @@ class SharedPrefs(context : Context) {
 
 
     fun setRequestPassModelList(
-        requestedPassList : List<RequestPassModel>?
+        requestedPassList : List<BusRequestModel>?
     ) {
         val requestedPassListString = if(!requestedPassList.isNullOrEmpty()) {
             json.encodeToString(
@@ -87,13 +89,26 @@ class SharedPrefs(context : Context) {
         }
     }
 
-    fun getRequestPassModelList() : List<RequestPassModel>? {
+    fun getRequestPassModelList() : List<BusRequestModel>? {
         val requestedPassListString = sharedPreferences.getString(REQUESTING_PASS_LIST_KEY, null)
         return if (requestedPassListString != null) {
-            json.decodeFromString<List<RequestPassModel>?>(requestedPassListString)
+            json.decodeFromString<List<BusRequestModel>?>(requestedPassListString)
         } else {
             null
         }
+    }
+
+
+    fun setRequestStateType(requestStatusEnum: RequestStatusEnum) {
+        editor.apply {
+            putString(REQUESTING_STATUS_KEY, requestStatusEnum.name)
+            apply()
+        }
+    }
+
+    fun getRequestStateType() : RequestStatusEnum? {
+        val requestStatusEnum = sharedPreferences.getString(REQUESTING_STATUS_KEY, null)
+        return RequestStatusEnum.entries.find { it.name == requestStatusEnum }
     }
 
 }

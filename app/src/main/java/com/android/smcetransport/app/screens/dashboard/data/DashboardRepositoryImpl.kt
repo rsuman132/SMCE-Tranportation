@@ -1,7 +1,7 @@
 package com.android.smcetransport.app.screens.dashboard.data
 
 import com.android.smcetransport.app.core.dto.BaseApiClass
-import com.android.smcetransport.app.core.dto.RequestPassModel
+import com.android.smcetransport.app.core.dto.BusRequestModel
 import com.android.smcetransport.app.core.enum.RequestStatusEnum
 import com.android.smcetransport.app.core.model.PhoneNumberRequestModel
 import com.android.smcetransport.app.core.network.ApiExecution
@@ -40,14 +40,14 @@ class DashboardRepositoryImpl(
     @ExperimentalSerializationApi
     override suspend fun sendNewRequestForStudentStaff(
         sendRequestingRequestModel: SendRequestingRequestModel
-    ): Flow<NetworkResult<BaseApiClass<RequestPassModel>>> {
+    ): Flow<NetworkResult<BaseApiClass<BusRequestModel>>> {
         val loginUserTypeEnum = sharedPrefs.getLoginType()?.name?.lowercase()
         val apiUrl = "$BASE_URL/api/${loginUserTypeEnum}busrequest/create"
         val httpStatement = ktorHttpClient.httpClientAndroid().preparePost {
             url(apiUrl)
             setBody(sendRequestingRequestModel)
         }
-        return apiExecution.executeApi<RequestPassModel>(httpStatement)
+        return apiExecution.executeApi<BusRequestModel>(httpStatement)
     }
 
     @ExperimentalSerializationApi
