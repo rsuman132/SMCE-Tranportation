@@ -54,6 +54,7 @@
     <string name="cancel_pass">Cancel Request</string>
     <string name="application_request">Application Request</string>
     <string name="cancellation_request">Cancellation Request</string>
+    <string name="acceptance_request">Accepted Request</string>
     <string name="over_all_data">Overall Data</string>
     <string name="category_management">Category Management</string>
     <string name="department_management">Department</string>
@@ -62,9 +63,21 @@
     <string name="logout_desc">Are you sure want to logout from this application?</string>
     <string name="yes_logout">Yes, Logout</string>
     <string name="cancel_text">Cancel</string>
+    <string name="requesting_new_pass">Requesting new pass</string>
+    <string name="requesting_new_pass_desc">By tapping send request button your are requesting a new pass</string>
+    <string name="send_request_text">Send request</string>
+    <string name="cancelling_new_pass">Cancelling pass</string>
+    <string name="cancelling_new_pass_desc">By tapping cancel request button your are cancelling a existing pass</string>
+    <string name="cancel_request_text">Cancel request</string>
+    <string name="enter_cancellation_reason">Enter cancellation reason</string>
+    <string name="enter_cancellation_reason_error">Enter valid cancellation reason</string>
+    <string name="already_a_pass_desc">You have already requested a new pass. Please cancel the pass and try again</string>
+    <string name="no_a_pass_desc">You have not requested any pass. Please requested a new pass and try again</string>
+    <string name="okay_text">Okay</string>
 
     <!-- Success Screen -->
     <string name="your_request_send_successfully">Your Request Send Successfully</string>
+    <string name="your_request_cancelled_successfully">Your Request Cancelled Successfully</string>
 
     <!-- Department Screen -->
     <string name="departments_text">Departments</string>
@@ -88,5 +101,25 @@
     <string name="enter_bus_route_error_text">Enter valid bus route</string>
     <string name="enter_driver_name_text">Enter driver name</string>
     <string name="enter_driver_name_error_text">Enter valid driver name</string>
+    
+    <!-- View Pass Screen -->
+    <string name="your_virtual_pass">Your virtual pass</string>
+    <string name="bus_no_text">Bus no</string>
+    <string name="not_set_text">Not set</string>
+    <string name="name_text">Name</string>
+    <string name="start_point_text">Start point</string>
+    <string name="via_route_text">Via route</string>
+    <string name="amount_text">Amount</string>
+    <string name="status_text">Status</string>
+    <string name="year_text">Year</string>
+
+
+    <!-- Request Status Screen -->
+    <string name="student_text">Student</string>
+    <string name="staff_text">Staff</string>
+    <string name="requested_text">Requested</string>
+    <string name="accepted_text">Accepted</string>
+    <string name="cancelled_text">Cancelled</string>
+
 
 </resources>

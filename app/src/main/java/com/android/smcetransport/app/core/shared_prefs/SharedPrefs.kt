@@ -2,6 +2,7 @@ package com.android.smcetransport.app.core.shared_prefs
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.android.smcetransport.app.core.dto.RequestPassModel
 import com.android.smcetransport.app.core.dto.UserModel
 import com.android.smcetransport.app.core.enum.LoginUserTypeEnum
 import kotlinx.serialization.json.Json
@@ -13,6 +14,7 @@ class SharedPrefs(context : Context) {
         private const val SHARED_PREFS_NAME = "smce_preferences"
         private const val LOGIN_USER_TYPE_KEY = "login_user_type"
         private const val USER_MODEL_KEY = "user_model_type"
+        private const val REQUESTING_PASS_LIST_KEY = "requesting_pass_list"
     }
 
     private val json = Json {
@@ -61,7 +63,34 @@ class SharedPrefs(context : Context) {
     fun getUserModel() : UserModel? {
         val userModelString = sharedPreferences.getString(USER_MODEL_KEY, null)
         return if (userModelString != null) {
-            json.decodeFromString<UserModel>(userModelString)
+            json.decodeFromString<UserModel?>(userModelString)
+        } else {
+            null
+        }
+    }
+
+
+    fun setRequestPassModelList(
+        requestedPassList : List<RequestPassModel>?
+    ) {
+        val requestedPassListString = if(!requestedPassList.isNullOrEmpty()) {
+            json.encodeToString(
+                value = requestedPassList,
+                serializer = serializer()
+            )
+        } else {
+            null
+        }
+        editor.apply {
+            putString(REQUESTING_PASS_LIST_KEY, requestedPassListString)
+            apply()
+        }
+    }
+
+    fun getRequestPassModelList() : List<RequestPassModel>? {
+        val requestedPassListString = sharedPreferences.getString(REQUESTING_PASS_LIST_KEY, null)
+        return if (requestedPassListString != null) {
+            json.decodeFromString<List<RequestPassModel>?>(requestedPassListString)
         } else {
             null
         }

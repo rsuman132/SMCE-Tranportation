@@ -23,7 +23,9 @@ data object SignUpRoute
 data object DashboardRoute
 
 @Serializable
-data object SuccessScreenRoute
+data class SuccessScreenRoute(
+    val messageText : String
+)
 
 @Serializable
 data object DepartmentScreenRoute
@@ -33,3 +35,6 @@ data object BusListScreenRoute
 
 @Serializable
 data object BusAddScreenRoute
+
+@Serializable
+data object ViewPassRoute

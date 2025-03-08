@@ -6,17 +6,17 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.android.smcetransport.app.R
 import com.android.smcetransport.app.screens.bus_managment.presentation.AddBusActionEvent
 import com.android.smcetransport.app.screens.bus_managment.presentation.AddBusScreen
-import com.android.smcetransport.app.screens.bus_managment.presentation.AddBusUIState
 import com.android.smcetransport.app.screens.bus_managment.presentation.AddBusViewModel
 import com.android.smcetransport.app.screens.bus_managment.presentation.BusListActionEvent
 import com.android.smcetransport.app.screens.bus_managment.presentation.BusListScreen
-import com.android.smcetransport.app.screens.bus_managment.presentation.BusListUIState
 import com.android.smcetransport.app.screens.bus_managment.presentation.BusListViewModel
 import com.android.smcetransport.app.screens.dashboard.presentation.DashboardActionEvents
 import com.android.smcetransport.app.screens.dashboard.presentation.DashboardScreen
@@ -37,6 +37,8 @@ import com.android.smcetransport.app.screens.signup.presentation.SignUpViewModel
 import com.android.smcetransport.app.screens.splash.presenter.SplashActionEvent
 import com.android.smcetransport.app.screens.splash.presenter.SplashScreen
 import com.android.smcetransport.app.screens.splash.presenter.SplashScreenViewModel
+import com.android.smcetransport.app.screens.view_pass.presentation.ViewPassScreen
+import com.android.smcetransport.app.screens.view_pass.presentation.ViewPassViewModel
 import com.android.smcetransport.app.screens.walkthrough.WalkThroughActionEvent
 import com.android.smcetransport.app.screens.walkthrough.WalkThroughScreen
 import com.android.smcetransport.app.screens.walkthrough.WalkThroughViewModel
@@ -293,6 +295,10 @@ fun SMCETransportApp(
         composable<DashboardRoute> {
             val dashboardViewModel : DashboardViewModel = koinViewModel()
             val dashboardUIState by dashboardViewModel.dashboardUIState.collectAsState()
+            val successMessage = stringResource(R.string.your_request_send_successfully)
+            val cancelMessage = stringResource(R.string.your_request_cancelled_successfully)
+            val alreadyPassDesc = stringResource(R.string.already_a_pass_desc)
+            val noPassDesc = stringResource(R.string.no_a_pass_desc)
             LaunchedEffect(Unit) {
                 dashboardViewModel.errorMessage.collectLatest {
                     context.showToast(it)
@@ -306,6 +312,24 @@ fun SMCETransportApp(
                         }
                         launchSingleTop = true
                     }
+                }
+            }
+            LaunchedEffect(Unit) {
+                dashboardViewModel.requestingSuccessEvent.collectLatest {
+                    navController.navigate(
+                        SuccessScreenRoute(
+                            messageText = successMessage
+                        )
+                    )
+                }
+            }
+            LaunchedEffect(Unit) {
+                dashboardViewModel.cancellationSuccessEvent.collectLatest {
+                    navController.navigate(
+                        SuccessScreenRoute(
+                            messageText = cancelMessage
+                        )
+                    )
                 }
             }
             DashboardScreen(
@@ -329,6 +353,70 @@ fun SMCETransportApp(
 
                         is DashboardActionEvents.OnManageBusClickEvent -> {
                             navController.navigate(BusListScreenRoute)
+                        }
+
+                        is DashboardActionEvents.OnSendRequestButtonClick -> {
+                            dashboardViewModel.sendRequestValidation()
+                        }
+                        is DashboardActionEvents.OnStartingPointCancellationTextUpdateEvent -> {
+                            if (it.staringPoint != null) {
+                                dashboardViewModel.updateStartingPointText(it.staringPoint)
+                                return@DashboardScreen
+                            }
+                            if (it.cancellationReason != null) {
+                                dashboardViewModel.updateCancellationReason(it.cancellationReason)
+                                return@DashboardScreen
+                            }
+                        }
+
+                        is DashboardActionEvents.OnSendRequestCardClick -> {
+                            if (dashboardViewModel.requestingRequestModel != null) {
+                                dashboardViewModel.updateInfoDialogStatus(
+                                    title = alreadyPassDesc,
+                                    show = true
+                                )
+                            } else {
+                                dashboardViewModel.updateSendRequestDialog(true)
+                            }
+                        }
+
+                        is DashboardActionEvents.OnRequestDialogDismissEvent -> {
+                            dashboardViewModel.updateSendRequestDialog(false)
+                        }
+
+                        is DashboardActionEvents.OnCancelDialogDismissEvent -> {
+                            dashboardViewModel.updateCancelRequestDialog(false)
+                        }
+                        is DashboardActionEvents.OnCancelRequestButtonClick -> {
+                            dashboardViewModel.cancelRequestValidation()
+                        }
+                        is DashboardActionEvents.OnCancelRequestCardClick -> {
+                            if (dashboardViewModel.requestingRequestModel != null) {
+                                dashboardViewModel.updateCancelRequestDialog(true)
+                            } else {
+                                dashboardViewModel.updateInfoDialogStatus(
+                                    title = noPassDesc,
+                                    show = true
+                                )
+                            }
+                        }
+
+                        is DashboardActionEvents.OnInfoDialogOpenDismissEvent -> {
+                            dashboardViewModel.updateInfoDialogStatus(
+                                title = null,
+                                show = it.show
+                            )
+                        }
+
+                        is DashboardActionEvents.OnViewPassClickEvent -> {
+                            if (dashboardViewModel.requestingRequestModel != null) {
+                                navController.navigate(ViewPassRoute)
+                            } else {
+                                dashboardViewModel.updateInfoDialogStatus(
+                                    title = noPassDesc,
+                                    show = true
+                                )
+                            }
                         }
                     }
                 }
@@ -476,9 +564,24 @@ fun SMCETransportApp(
 
         // Success Message Screen
         composable<SuccessScreenRoute> {
+            val successScreenRoute = it.toRoute<SuccessScreenRoute>()
             RequestSuccessScreen(
                 modifier = modifier,
+                messageText = successScreenRoute.messageText,
                 onBackPress = {
+                    navController.navigateUp()
+                }
+            )
+        }
+
+        // View Pass Screen
+        composable<ViewPassRoute> {
+            val viewPassViewModel : ViewPassViewModel = koinViewModel()
+            val viewPassUiState by viewPassViewModel.viewPassUiState.collectAsState()
+            ViewPassScreen(
+                modifier = modifier,
+                viewPassUiState = viewPassUiState,
+                onBackPressEvent = {
                     navController.navigateUp()
                 }
             )

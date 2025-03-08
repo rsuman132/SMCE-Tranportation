@@ -22,7 +22,8 @@ data class BaseApiClass<T : Any?>(
         "busincharges",
         "student_bus_requests",
         "staff_bus_requests",
-        "buses"
+        "buses",
+        "request_data"
 )
     val data: T? = null,
     @SerialName("message")

@@ -29,6 +29,10 @@ import com.android.smcetransport.app.screens.splash.data.SplashRepositoryImpl
 import com.android.smcetransport.app.screens.splash.domain.SplashRepository
 import com.android.smcetransport.app.screens.splash.domain.SplashUseCase
 import com.android.smcetransport.app.screens.splash.presenter.SplashScreenViewModel
+import com.android.smcetransport.app.screens.view_pass.data.ViewPassRepositoryImpl
+import com.android.smcetransport.app.screens.view_pass.domain.ViewPassRepository
+import com.android.smcetransport.app.screens.view_pass.domain.ViewPassRepositoryUseCase
+import com.android.smcetransport.app.screens.view_pass.presentation.ViewPassViewModel
 import com.android.smcetransport.app.screens.walkthrough.WalkThroughViewModel
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.factoryOf
@@ -56,6 +60,9 @@ val appModule = module {
     singleOf(::BusRepositoryImpl) {
         bind<BusRepository>()
     }
+    singleOf(::ViewPassRepositoryImpl) {
+        bind<ViewPassRepository>()
+    }
 
     factoryOf(::SharedPrefs)
     factoryOf(::OTPVerificationUseCase)
@@ -66,6 +73,7 @@ val appModule = module {
     factoryOf(::DashboardUseCase)
     factoryOf(::DepartmentUseCase)
     factoryOf(::BusUseCase)
+    factoryOf(::ViewPassRepositoryUseCase)
 
     viewModelOf(::SplashScreenViewModel)
     viewModelOf(::WalkThroughViewModel)
@@ -76,4 +84,5 @@ val appModule = module {
     viewModelOf(::DepartmentListViewModel)
     viewModelOf(::BusListViewModel)
     viewModelOf(::AddBusViewModel)
+    viewModelOf(::ViewPassViewModel)
 }

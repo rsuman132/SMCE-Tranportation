@@ -7,7 +7,6 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,6 +40,7 @@ import com.android.smcetransport.app.ui.theme.theme.theme.mediumFont
 @Composable
 fun RequestSuccessScreen(
     modifier: Modifier = Modifier,
+    messageText : String,
     onBackPress : () -> Unit
 ) {
 
@@ -72,7 +72,7 @@ fun RequestSuccessScreen(
                 .fillMaxSize()
                 .weight(1f).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(
-                16.dp,
+                32.dp,
                 alignment = Alignment.CenterVertically
             ),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -114,10 +114,11 @@ fun RequestSuccessScreen(
 
 
             Text(
-                text = stringResource(R.string.your_request_send_successfully),
+                text = messageText,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 textAlign = TextAlign.Center,
                 fontSize = 30.sp,
+                lineHeight = 36.sp,
                 fontFamily = FontFamily(mediumFont)
             )
 
@@ -130,6 +131,7 @@ fun RequestSuccessScreen(
 fun PreviewRequestSuccessScreen() {
     RequestSuccessScreen(
         modifier = Modifier.fillMaxSize(),
+        messageText = stringResource(R.string.your_request_send_successfully),
         onBackPress = {
 
         }

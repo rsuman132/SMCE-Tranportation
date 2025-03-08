@@ -6,13 +6,16 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -25,15 +28,23 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import coil3.compose.AsyncImage
 import com.android.smcetransport.app.R
 import com.android.smcetransport.app.core.enum.LoginUserTypeEnum
+import com.android.smcetransport.app.ui.components.AppButton
+import com.android.smcetransport.app.ui.components.CommonTextField
 import com.android.smcetransport.app.ui.components.DashBoardCardItem
 import com.android.smcetransport.app.ui.components.InformationDialog
+import com.android.smcetransport.app.ui.components.TitleWithButtonInfoDialog
 import com.android.smcetransport.app.ui.theme.theme.theme.normalFont
 import com.android.smcetransport.app.ui.theme.theme.theme.semiBoldFont
 
@@ -46,7 +57,8 @@ fun DashboardScreen(
 ) {
 
     Box(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()
             .background(color = colorResource(R.color.white))
     ) {
         Column(
@@ -155,7 +167,7 @@ fun DashboardScreen(
                                 cardItemBgColor = colorResource(android.R.color.holo_orange_dark),
                                 cardItemIcon = painterResource(R.drawable.ic_hand_eye),
                                 onItemClick = {
-
+                                    onDashboardActionEvents(DashboardActionEvents.OnViewPassClickEvent)
                                 }
                             )
 
@@ -168,7 +180,7 @@ fun DashboardScreen(
                                 cardItemBgColor = colorResource(android.R.color.holo_purple),
                                 cardItemIcon = painterResource(R.drawable.ic_schedule_send),
                                 onItemClick = {
-
+                                    onDashboardActionEvents(DashboardActionEvents.OnSendRequestCardClick)
                                 }
                             )
                         }
@@ -182,7 +194,7 @@ fun DashboardScreen(
                             cardItemBgColor = colorResource(android.R.color.holo_blue_bright),
                             cardItemIcon = painterResource(R.drawable.ic_contract_delete),
                             onItemClick = {
-
+                                onDashboardActionEvents(DashboardActionEvents.OnCancelRequestCardClick)
                             }
                         )
 
@@ -191,32 +203,33 @@ fun DashboardScreen(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
+                                .height(IntrinsicSize.Max)
                                 .padding(vertical = 16.dp)
                         ) {
 
                             DashBoardCardItem(
                                 modifier = Modifier
-                                    .fillMaxWidth()
+                                    .fillMaxSize()
                                     .weight(1f)
                                     .padding(start = 16.dp, end = 8.dp),
                                 cardItemText = stringResource(R.string.view_pass),
                                 cardItemBgColor = colorResource(android.R.color.holo_orange_dark),
                                 cardItemIcon = painterResource(R.drawable.ic_hand_eye),
                                 onItemClick = {
-
+                                    onDashboardActionEvents(DashboardActionEvents.OnViewPassClickEvent)
                                 }
                             )
 
                             DashBoardCardItem(
                                 modifier = Modifier
-                                    .fillMaxWidth()
+                                    .fillMaxSize()
                                     .weight(1f)
                                     .padding(start = 8.dp, end = 16.dp),
                                 cardItemText = stringResource(R.string.apply_new),
                                 cardItemBgColor = colorResource(android.R.color.holo_purple),
                                 cardItemIcon = painterResource(R.drawable.ic_schedule_send),
                                 onItemClick = {
-
+                                    onDashboardActionEvents(DashboardActionEvents.OnSendRequestCardClick)
                                 }
                             )
                         }
@@ -224,16 +237,17 @@ fun DashboardScreen(
                     LoginUserTypeEnum.BUSINCHARGE -> {
                         Row(modifier = Modifier
                             .fillMaxWidth()
+                            .height(IntrinsicSize.Min)
                             .padding(vertical = 16.dp)) {
 
                             DashBoardCardItem(
                                 modifier = Modifier
-                                    .fillMaxWidth()
+                                    .fillMaxSize()
                                     .weight(1f)
                                     .padding(start = 16.dp, end = 8.dp),
-                                cardItemText = stringResource(R.string.application_request),
+                                cardItemText = stringResource(R.string.acceptance_request),
                                 cardItemBgColor = colorResource(android.R.color.holo_orange_dark),
-                                cardItemIcon = painterResource(R.drawable.ic_tab_new),
+                                cardItemIcon = painterResource(R.drawable.ic_add_box),
                                 onItemClick = {
 
                                 }
@@ -241,9 +255,28 @@ fun DashboardScreen(
 
                             DashBoardCardItem(
                                 modifier = Modifier
-                                    .fillMaxWidth()
+                                    .fillMaxSize()
                                     .weight(1f)
                                     .padding(start = 8.dp, end = 16.dp),
+                                cardItemText = stringResource(R.string.acceptance_request),
+                                cardItemBgColor = colorResource(android.R.color.holo_green_light),
+                                cardItemIcon = painterResource(R.drawable.ic_tab_new),
+                                onItemClick = {
+
+                                }
+                            )
+                        }
+
+                        Row(modifier = Modifier
+                            .fillMaxWidth()
+                            .height(IntrinsicSize.Min)
+                            .padding(vertical = 16.dp)) {
+
+                            DashBoardCardItem(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .weight(1f)
+                                    .padding(start = 16.dp, end = 8.dp),
                                 cardItemText = stringResource(R.string.cancellation_request),
                                 cardItemBgColor = colorResource(android.R.color.holo_purple),
                                 cardItemIcon = painterResource(R.drawable.ic_tab_close),
@@ -251,20 +284,22 @@ fun DashboardScreen(
 
                                 }
                             )
+
+
+                            DashBoardCardItem(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .weight(1f)
+                                    .padding(start = 8.dp, end = 16.dp),
+                                cardItemText = stringResource(R.string.over_all_data),
+                                cardItemBgColor = colorResource(android.R.color.holo_blue_bright),
+                                cardItemIcon = painterResource(R.drawable.ic_data_check),
+                                onItemClick = {
+
+                                }
+                            )
+
                         }
-
-                        DashBoardCardItem(
-                            modifier = Modifier
-                                .padding(top = 8.dp, bottom = 16.dp)
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp),
-                            cardItemText = stringResource(R.string.over_all_data),
-                            cardItemBgColor = colorResource(android.R.color.holo_blue_bright),
-                            cardItemIcon = painterResource(R.drawable.ic_data_check),
-                            onItemClick = {
-
-                            }
-                        )
 
                         Text(
                             text = stringResource(R.string.category_management),
@@ -332,7 +367,159 @@ fun DashboardScreen(
                 },
                 dialogIcon = painterResource(R.drawable.ic_logout),
                 dialogDesc = stringResource(R.string.logout_desc),
-                dialogTitle = stringResource(R.string.logout_text)
+                dialogTitle = stringResource(R.string.logout_text),
+                buttonAndIconColor = colorResource(R.color.red_color)
+            )
+        }
+
+        if (dashboardUIState.isShowRequestPassDialog) {
+            Dialog(
+                onDismissRequest = {
+                    onDashboardActionEvents(DashboardActionEvents.OnRequestDialogDismissEvent)
+                },
+                properties = DialogProperties(
+                    dismissOnClickOutside = !dashboardUIState.isRequestingButtonLoading,
+                    dismissOnBackPress = !dashboardUIState.isRequestingButtonLoading,
+                    usePlatformDefaultWidth = false
+                )
+            ) {
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                        .clip(shape = RoundedCornerShape(5))
+                        .background(color = colorResource(R.color.white))
+                        .padding(24.dp),
+                    verticalArrangement = Arrangement.spacedBy(24.dp)
+                ) {
+
+
+                    Text(
+                        text = stringResource(R.string.requesting_new_pass),
+                        fontFamily = FontFamily(semiBoldFont),
+                        fontSize = 24.sp
+                    )
+                    Text(
+                        text = stringResource(R.string.requesting_new_pass_desc),
+                        fontFamily = FontFamily(normalFont),
+                        fontSize = 18.sp
+                    )
+
+                    CommonTextField(
+                        modifier = Modifier.fillMaxWidth(),
+                        etValue = dashboardUIState.startingPointText,
+                        onEtValueChangeListener = {
+                            onDashboardActionEvents(
+                                DashboardActionEvents.OnStartingPointCancellationTextUpdateEvent(
+                                    staringPoint = it,
+                                    cancellationReason = null
+                                )
+                            )
+                        },
+                        etPlaceHolder = stringResource(R.string.enter_starting_point_text),
+                        isShowError = dashboardUIState.showStartingPointError,
+                        etErrorText = stringResource(R.string.enter_starting_point_error_text),
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(
+                            capitalization = KeyboardCapitalization.Words,
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next
+                        )
+                    )
+
+                    AppButton(
+                        buttonText = stringResource(R.string.send_request_text),
+                        modifier = Modifier.fillMaxWidth(),
+                        isButtonLoading = dashboardUIState.isRequestingButtonLoading,
+                        buttonClickEvent = {
+                            onDashboardActionEvents(DashboardActionEvents.OnSendRequestButtonClick)
+                        }
+                    )
+
+                }
+
+            }
+        }
+
+        if (dashboardUIState.isShowCancelPassDialog) {
+            Dialog(
+                onDismissRequest = {
+                    onDashboardActionEvents(DashboardActionEvents.OnCancelDialogDismissEvent)
+                },
+                properties = DialogProperties(
+                    dismissOnClickOutside = !dashboardUIState.isCancelButtonLoading,
+                    dismissOnBackPress = !dashboardUIState.isCancelButtonLoading,
+                    usePlatformDefaultWidth = false
+                )
+            ) {
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                        .clip(shape = RoundedCornerShape(5))
+                        .background(color = colorResource(R.color.white))
+                        .padding(24.dp),
+                    verticalArrangement = Arrangement.spacedBy(24.dp)
+                ) {
+
+
+                    Text(
+                        text = stringResource(R.string.cancelling_new_pass),
+                        fontFamily = FontFamily(semiBoldFont),
+                        fontSize = 24.sp
+                    )
+                    Text(
+                        text = stringResource(R.string.cancelling_new_pass_desc),
+                        fontFamily = FontFamily(normalFont),
+                        fontSize = 18.sp
+                    )
+
+                    CommonTextField(
+                        modifier = Modifier.fillMaxWidth(),
+                        etValue = dashboardUIState.reasonForCancellation,
+                        onEtValueChangeListener = {
+                            onDashboardActionEvents(
+                                DashboardActionEvents.OnStartingPointCancellationTextUpdateEvent(
+                                    staringPoint = null,
+                                    cancellationReason = it
+                                )
+                            )
+                        },
+                        etPlaceHolder = stringResource(R.string.enter_cancellation_reason),
+                        isShowError = dashboardUIState.showReasonForCancellationError,
+                        etErrorText = stringResource(R.string.enter_cancellation_reason_error),
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(
+                            capitalization = KeyboardCapitalization.Sentences,
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next
+                        )
+                    )
+
+                    AppButton(
+                        buttonText = stringResource(R.string.cancel_request_text),
+                        modifier = Modifier.fillMaxWidth(),
+                        isButtonLoading = dashboardUIState.isCancelButtonLoading,
+                        buttonClickEvent = {
+                            onDashboardActionEvents(DashboardActionEvents.OnCancelRequestButtonClick)
+                        }
+                    )
+
+                }
+
+            }
+        }
+
+        if (dashboardUIState.showInfoDialog) {
+            TitleWithButtonInfoDialog(
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                dialogText = dashboardUIState.infoDialogTitleText,
+                dialogButtonText = stringResource(R.string.okay_text),
+                onDismissEvent = {
+                    onDashboardActionEvents(DashboardActionEvents.OnInfoDialogOpenDismissEvent(false))
+                }
             )
         }
     }
@@ -350,7 +537,8 @@ fun PreviewDashboardScreen() {
         dashboardUIState = DashboardUIState(
             userName = "Suman",
             userAvatar = "uhhh.jpg",
-            userCollegeId = "SMCE12345"
+            userCollegeId = "SMCE12345",
+            isShowCancelPassDialog = false
         ),
         onDashboardActionEvents = {
 

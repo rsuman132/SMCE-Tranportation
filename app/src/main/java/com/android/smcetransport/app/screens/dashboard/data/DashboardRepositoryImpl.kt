@@ -1,9 +1,10 @@
 package com.android.smcetransport.app.screens.dashboard.data
 
 import com.android.smcetransport.app.core.dto.BaseApiClass
+import com.android.smcetransport.app.core.dto.RequestPassModel
+import com.android.smcetransport.app.core.enum.RequestStatusEnum
 import com.android.smcetransport.app.core.model.PhoneNumberRequestModel
 import com.android.smcetransport.app.core.network.ApiExecution
-import com.android.smcetransport.app.core.network.ApiUrls
 import com.android.smcetransport.app.core.network.ApiUrls.BASE_URL
 import com.android.smcetransport.app.core.network.KtorHttpClient
 import com.android.smcetransport.app.core.network.NetworkResult
@@ -27,11 +28,40 @@ class DashboardRepositoryImpl(
     override suspend fun logoutUser(
         phoneNumberRequestModel: PhoneNumberRequestModel
     ): Flow<NetworkResult<BaseApiClass<JsonObject>>> {
-        val loginUserTypeEnum = sharedPrefs.getLoginType()?.name?.length
+        val loginUserTypeEnum = sharedPrefs.getLoginType()?.name?.lowercase()
         val apiUrl = "$BASE_URL/api/$loginUserTypeEnum/logout"
         val httpStatement = ktorHttpClient.httpClientAndroid().preparePost {
             url(apiUrl)
             setBody(phoneNumberRequestModel)
+        }
+        return apiExecution.executeApi<JsonObject>(httpStatement)
+    }
+
+    @ExperimentalSerializationApi
+    override suspend fun sendNewRequestForStudentStaff(
+        sendRequestingRequestModel: SendRequestingRequestModel
+    ): Flow<NetworkResult<BaseApiClass<RequestPassModel>>> {
+        val loginUserTypeEnum = sharedPrefs.getLoginType()?.name?.lowercase()
+        val apiUrl = "$BASE_URL/api/${loginUserTypeEnum}busrequest/create"
+        val httpStatement = ktorHttpClient.httpClientAndroid().preparePost {
+            url(apiUrl)
+            setBody(sendRequestingRequestModel)
+        }
+        return apiExecution.executeApi<RequestPassModel>(httpStatement)
+    }
+
+    @ExperimentalSerializationApi
+    override suspend fun sendCancellationForStudentStaff(
+        cancelRequestRequestModel: CancelRequestRequestModel
+    ): Flow<NetworkResult<BaseApiClass<JsonObject>>> {
+        val loginUserTypeEnum = sharedPrefs.getLoginType()?.name?.lowercase()
+        val passId = sharedPrefs.getRequestPassModelList()?.find {
+            (it.status == RequestStatusEnum.REQUESTED.name || it.status == RequestStatusEnum.ACCEPTED.name)
+        }?.id
+        val apiUrl = "$BASE_URL/api/${loginUserTypeEnum}busrequest/update/$passId"
+        val httpStatement = ktorHttpClient.httpClientAndroid().preparePost {
+            url(apiUrl)
+            setBody(cancelRequestRequestModel)
         }
         return apiExecution.executeApi<JsonObject>(httpStatement)
     }
