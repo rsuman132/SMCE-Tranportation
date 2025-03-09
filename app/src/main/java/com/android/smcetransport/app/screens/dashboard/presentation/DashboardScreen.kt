@@ -287,7 +287,7 @@ fun DashboardScreen(
                                 cardItemIcon = painterResource(R.drawable.ic_tab_close),
                                 onItemClick = {
                                     onDashboardActionEvents(DashboardActionEvents.OnBusStatusRequestClickEvent(
-                                        requestStatusEnum = RequestStatusEnum.ACCEPTED
+                                        requestStatusEnum = RequestStatusEnum.CANCELLED
                                     ))
                                 }
                             )

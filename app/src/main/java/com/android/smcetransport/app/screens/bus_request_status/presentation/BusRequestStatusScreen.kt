@@ -18,7 +18,9 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,7 +38,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.android.smcetransport.app.R
 import com.android.smcetransport.app.core.enum.LoginUserTypeEnum
-import com.android.smcetransport.app.screens.dashboard.presentation.DashboardActionEvents
 import com.android.smcetransport.app.ui.components.AppButton
 import com.android.smcetransport.app.ui.components.AppToolBar
 import com.android.smcetransport.app.ui.components.BusStatusItemView
@@ -44,6 +45,8 @@ import com.android.smcetransport.app.ui.components.CommonTextField
 import com.android.smcetransport.app.ui.theme.theme.theme.mediumFont
 import com.android.smcetransport.app.ui.theme.theme.theme.normalFont
 import com.android.smcetransport.app.ui.theme.theme.theme.semiBoldFont
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 @Composable
@@ -56,6 +59,14 @@ fun BusRequestStatusScreen(
     val pagerState = rememberPagerState { 2 }
     val coroutineScope = rememberCoroutineScope()
 
+    LaunchedEffect(pagerState) {
+        snapshotFlow {
+            pagerState.currentPage
+        }.distinctUntilChanged().collectLatest {
+            onBusRequestPageActionEvent(BusRequestPageActionEvent.OnTabChangeEvent(pagerState.currentPage))
+        }
+    }
+
 
     Box(modifier = modifier.fillMaxSize()
         .background(color = colorResource(R.color.white)),
@@ -63,7 +74,7 @@ fun BusRequestStatusScreen(
     ) {
 
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .background(color = colorResource(R.color.white))
         ) {
@@ -130,7 +141,7 @@ fun BusRequestStatusScreen(
                                     modifier = Modifier
                                         .fillMaxSize()
                                         .padding(16.dp),
-                                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                                    verticalArrangement = Arrangement.spacedBy(16.dp)
                                 ) {
                                     items(busRequestStatusUIState.busRequestStatusStudentList, key = {
                                         "${it.id}"
@@ -142,14 +153,24 @@ fun BusRequestStatusScreen(
                                             userImageUrl = it.requesterUserModel?.imageUrl,
                                             userDepartment = "${it.requesterUserModel?.departmentModel?.departmentName}",
                                             userYear = it.requesterUserModel?.year,
-                                            userLoginType = LoginUserTypeEnum.STUDENT,
                                             pickUpPoint = "${it.pickupPoint}",
                                             requestStatus = it.status,
                                             onCancelClick = {
-
+                                                onBusRequestPageActionEvent(BusRequestPageActionEvent.UpdateCancelSelectedId(
+                                                    id = it.id,
+                                                    requesterId = it.requesterId
+                                                ))
                                             },
                                             onApproveClick = {
-
+                                                if (it.id == null) {
+                                                    return@BusStatusItemView
+                                                }
+                                                onBusRequestPageActionEvent(
+                                                    BusRequestPageActionEvent.OnApproveButtonEvent(
+                                                        id = it.id,
+                                                        loginUserTypeEnum = LoginUserTypeEnum.STUDENT
+                                                    )
+                                                )
                                             }
                                         )
                                     }
@@ -182,7 +203,7 @@ fun BusRequestStatusScreen(
                                     modifier = Modifier
                                         .fillMaxSize()
                                         .padding(16.dp),
-                                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                                    verticalArrangement = Arrangement.spacedBy(16.dp)
                                 ) {
                                     items(busRequestStatusUIState.busRequestStatusStaffList, key = {
                                         "${it.id}"
@@ -194,14 +215,24 @@ fun BusRequestStatusScreen(
                                             userImageUrl = it.requesterUserModel?.imageUrl,
                                             userDepartment = "${it.requesterUserModel?.departmentModel?.departmentName}",
                                             userYear = it.requesterUserModel?.year,
-                                            userLoginType = LoginUserTypeEnum.STAFF,
                                             pickUpPoint = "${it.pickupPoint}",
                                             requestStatus = it.status,
                                             onCancelClick = {
-
+                                                onBusRequestPageActionEvent(BusRequestPageActionEvent.UpdateCancelSelectedId(
+                                                    id = it.id,
+                                                    requesterId = it.requesterId
+                                                ))
                                             },
                                             onApproveClick = {
-
+                                                if (it.id == null) {
+                                                    return@BusStatusItemView
+                                                }
+                                                onBusRequestPageActionEvent(
+                                                    BusRequestPageActionEvent.OnApproveButtonEvent(
+                                                        id = it.id,
+                                                        loginUserTypeEnum = LoginUserTypeEnum.STAFF
+                                                    )
+                                                )
                                             }
                                         )
                                     }
@@ -222,7 +253,6 @@ fun BusRequestStatusScreen(
                         }
                     }
                 }
-                onBusRequestPageActionEvent(BusRequestPageActionEvent.OnTabChangeEvent(page))
             }
 
         }
@@ -230,7 +260,7 @@ fun BusRequestStatusScreen(
         if (busRequestStatusUIState.isShowCancelDialog) {
             Dialog(
                 onDismissRequest = {
-
+                    onBusRequestPageActionEvent(BusRequestPageActionEvent.CancelDialogDismissEvent)
                 },
                 properties = DialogProperties(
                     dismissOnClickOutside = !busRequestStatusUIState.isCancelRequestButtonLoading,
@@ -265,7 +295,7 @@ fun BusRequestStatusScreen(
                         modifier = Modifier.fillMaxWidth(),
                         etValue = busRequestStatusUIState.reasonForCancellation,
                         onEtValueChangeListener = {
-
+                            onBusRequestPageActionEvent(BusRequestPageActionEvent.OnCancelReasonTextChange(it))
                         },
                         etPlaceHolder = stringResource(R.string.enter_cancellation_reason),
                         isShowError = busRequestStatusUIState.isShowReasonForCancellationError,
@@ -274,7 +304,7 @@ fun BusRequestStatusScreen(
                         keyboardOptions = KeyboardOptions(
                             capitalization = KeyboardCapitalization.Sentences,
                             keyboardType = KeyboardType.Text,
-                            imeAction = ImeAction.Next
+                            imeAction = ImeAction.Done
                         )
                     )
 
@@ -283,7 +313,7 @@ fun BusRequestStatusScreen(
                         modifier = Modifier.fillMaxWidth(),
                         isButtonLoading = busRequestStatusUIState.isCancelRequestButtonLoading,
                         buttonClickEvent = {
-
+                            onBusRequestPageActionEvent(BusRequestPageActionEvent.ValidateCancelRequest)
                         }
                     )
 

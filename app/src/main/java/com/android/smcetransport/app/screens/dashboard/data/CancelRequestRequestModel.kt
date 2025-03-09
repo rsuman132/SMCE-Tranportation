@@ -10,6 +10,8 @@ data class CancelRequestRequestModel(
     val staffId : String?,
     @SerialName("student_id")
     val studentId : String?,
+    @SerialName("bus_incharge_id")
+    val busInChargeId : String?,
     @SerialName("reason_for_cancellation")
     val reasonForCancellation : String,
     @SerialName("status")

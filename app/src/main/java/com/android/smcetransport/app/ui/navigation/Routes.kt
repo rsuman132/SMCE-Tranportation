@@ -1,5 +1,6 @@
 package com.android.smcetransport.app.ui.navigation
 
+import com.android.smcetransport.app.core.enum.LoginUserTypeEnum
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -41,3 +42,9 @@ data object ViewPassRoute
 
 @Serializable
 data object BusRequestStatusRoute
+
+@Serializable
+data class BusRequestStatusApproveRoute(
+    val id : String,
+    val loginUserTypeEnum: LoginUserTypeEnum
+)

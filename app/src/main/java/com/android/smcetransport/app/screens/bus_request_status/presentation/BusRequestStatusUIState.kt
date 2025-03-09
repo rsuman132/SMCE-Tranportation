@@ -11,5 +11,7 @@ data class BusRequestStatusUIState(
     val isShowCancelDialog : Boolean = false,
     val reasonForCancellation : String = "",
     val isShowReasonForCancellationError : Boolean = false,
-    val isCancelRequestButtonLoading : Boolean = false
+    val isCancelRequestButtonLoading : Boolean = false,
+    val selectedRequestId : String? = null,
+    val selectedRequesterId : String? = null
 )

@@ -21,16 +21,20 @@ class ApiExecution {
             if (statusValue in 200..299) {
                 emit(NetworkResult.Success(data = responseData))
             } else {
-                val errorMessageException = if (!responseData.message.isNullOrEmpty()) {
-                    Exception(responseData.message)
+                if (statusValue == 404) {
+                    emit(NetworkResult.Success(data = BaseApiClass(data = null)))
                 } else {
-                    getErrorFromStatusCode(statusValue)
+                    val errorMessageException = if (!responseData.message.isNullOrEmpty()) {
+                        Exception(responseData.message)
+                    } else {
+                        getErrorFromStatusCode(statusValue)
+                    }
+                    emit(NetworkResult.Error(
+                        message = errorMessageException.message,
+                        data = null,
+                        code = statusValue
+                    ))
                 }
-                emit(NetworkResult.Error(
-                    message = errorMessageException.message,
-                    data = null,
-                    code = statusValue
-                ))
             }
         } catch (e: Exception) {
             emit(NetworkResult.Error(message = e.message, null))

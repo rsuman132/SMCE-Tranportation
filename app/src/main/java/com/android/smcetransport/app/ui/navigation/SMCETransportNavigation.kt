@@ -12,6 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.android.smcetransport.app.R
+import com.android.smcetransport.app.core.enum.LoginUserTypeEnum
 import com.android.smcetransport.app.screens.bus_managment.presentation.AddBusActionEvent
 import com.android.smcetransport.app.screens.bus_managment.presentation.AddBusScreen
 import com.android.smcetransport.app.screens.bus_managment.presentation.AddBusViewModel
@@ -19,6 +20,9 @@ import com.android.smcetransport.app.screens.bus_managment.presentation.BusListA
 import com.android.smcetransport.app.screens.bus_managment.presentation.BusListScreen
 import com.android.smcetransport.app.screens.bus_managment.presentation.BusListViewModel
 import com.android.smcetransport.app.screens.bus_request_status.presentation.BusRequestPageActionEvent
+import com.android.smcetransport.app.screens.bus_request_status.presentation.BusRequestStatusApproveEvent
+import com.android.smcetransport.app.screens.bus_request_status.presentation.BusRequestStatusApproveScreen
+import com.android.smcetransport.app.screens.bus_request_status.presentation.BusRequestStatusApproveViewModel
 import com.android.smcetransport.app.screens.bus_request_status.presentation.BusRequestStatusScreen
 import com.android.smcetransport.app.screens.bus_request_status.presentation.BusRequestStatusViewModel
 import com.android.smcetransport.app.screens.dashboard.presentation.DashboardActionEvents
@@ -48,6 +52,7 @@ import com.android.smcetransport.app.screens.walkthrough.WalkThroughViewModel
 import com.android.smcetransport.app.utils.ContextExtension.showToast
 import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.serialization.builtins.serializer
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -606,6 +611,12 @@ fun SMCETransportApp(
                 }
             }
 
+            LaunchedEffect(Unit) {
+                navController.currentBackStackEntry?.savedStateHandle?.get<LoginUserTypeEnum?>("loginTypeEnum")?.let {
+                    busRequestStatusViewModel.hitApiProcess()
+                }
+            }
+
             BusRequestStatusScreen(
                 modifier = modifier,
                 busRequestStatusUIState = busRequestStatusUIState,
@@ -617,9 +628,111 @@ fun SMCETransportApp(
                         is BusRequestPageActionEvent.OnTabChangeEvent -> {
                             busRequestStatusViewModel.updateSelectedPos(it.selectedPos)
                         }
+
+                        is BusRequestPageActionEvent.OnCancelReasonTextChange -> {
+                            busRequestStatusViewModel.updateCancelReasonText(it.cancelReason)
+                        }
+
+                        is BusRequestPageActionEvent.ValidateCancelRequest -> {
+                            busRequestStatusViewModel.validateCancelRequest()
+                        }
+
+                        is BusRequestPageActionEvent.UpdateCancelSelectedId -> {
+                            busRequestStatusViewModel.updateCancelIdAndOpenDialog(
+                                id = it.id,
+                                requesterId = it.requesterId
+                            )
+                        }
+
+                        is BusRequestPageActionEvent.CancelDialogDismissEvent -> {
+                            busRequestStatusViewModel.updateCancelOpenDialog()
+                        }
+
+                        is BusRequestPageActionEvent.OnApproveButtonEvent -> {
+                            navController.navigate(
+                                BusRequestStatusApproveRoute(
+                                    id = it.id,
+                                    loginUserTypeEnum = it.loginUserTypeEnum
+                                )
+                            )
+                        }
                     }
                 }
             )
+        }
+
+        // Bus Request Approve Screen
+        composable<BusRequestStatusApproveRoute> {
+
+            val busRequestStatusApproveRoute = it.toRoute<BusRequestStatusApproveRoute>()
+            val busRequestStatusApproveViewModel : BusRequestStatusApproveViewModel = koinViewModel()
+            val busRequestStatusApproveUIState by busRequestStatusApproveViewModel.busRequestStatusApproveUIState.collectAsState()
+
+            LaunchedEffect(Unit) {
+                busRequestStatusApproveViewModel.updateIdAndLoginType(
+                    id = busRequestStatusApproveRoute.id,
+                    loginUserTypeEnum = busRequestStatusApproveRoute.loginUserTypeEnum
+                )
+                busRequestStatusApproveViewModel.getBusRequestById()
+            }
+
+            LaunchedEffect(Unit) {
+                busRequestStatusApproveViewModel.errorMessage.collectLatest { msg ->
+                    context.showToast(msg)
+                }
+            }
+
+            LaunchedEffect(Unit) {
+                busRequestStatusApproveViewModel.approveSuccessEvent.collectLatest { loginTypeEnum ->
+                    navController.previousBackStackEntry?.savedStateHandle?.set(
+                        "loginTypeEnum",
+                        loginTypeEnum
+                    )
+                    if (loginTypeEnum != null) {
+                        navController.navigateUp()
+                    }
+                }
+            }
+
+            BusRequestStatusApproveScreen(
+                modifier = modifier,
+                busRequestStatusApproveUIState = busRequestStatusApproveUIState,
+                onBusRequestApproveActionEvent = { event ->
+                    when(event) {
+                        is BusRequestStatusApproveEvent.OnBackPressEvent -> {
+                            navController.navigateUp()
+                        }
+
+                        is BusRequestStatusApproveEvent.OnBusDropDownListApiHitEvent -> {
+                            busRequestStatusApproveViewModel.getAllBusList()
+                        }
+
+                        is BusRequestStatusApproveEvent.OnDropDownChangeEvent -> {
+                            busRequestStatusApproveViewModel.updateDepartment(
+                                selectedBusId = event.selectedBusId,
+                                selectedBusText = event.busSelectedText,
+                                isExpanded = event.isExpanded
+                            )
+                        }
+
+                        is BusRequestStatusApproveEvent.OnTextChangeEvent -> {
+                            if (event.amountText != null) {
+                                busRequestStatusApproveViewModel.updateAmountText(event.amountText)
+                                return@BusRequestStatusApproveScreen
+                            }
+                            if (event.pickUpPoint != null) {
+                                busRequestStatusApproveViewModel.updateStartPoint(event.pickUpPoint)
+                                return@BusRequestStatusApproveScreen
+                            }
+                        }
+
+                        is BusRequestStatusApproveEvent.OnApproveButtonEvent -> {
+                            busRequestStatusApproveViewModel.validateApproveStatus()
+                        }
+                    }
+                }
+            )
+
         }
 
 

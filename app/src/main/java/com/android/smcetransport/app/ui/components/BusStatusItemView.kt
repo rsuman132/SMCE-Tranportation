@@ -28,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.android.smcetransport.app.R
-import com.android.smcetransport.app.core.enum.LoginUserTypeEnum
 import com.android.smcetransport.app.core.enum.RequestStatusEnum
 import com.android.smcetransport.app.ui.theme.theme.theme.mediumFont
 import com.android.smcetransport.app.ui.theme.theme.theme.semiBoldFont
@@ -41,7 +40,6 @@ fun BusStatusItemView(
     userImageUrl : String?,
     userDepartment : String,
     userYear : String?,
-    userLoginType : LoginUserTypeEnum,
     pickUpPoint : String,
     requestStatus : String?,
     onCancelClick : () -> Unit,
@@ -62,8 +60,8 @@ fun BusStatusItemView(
         userDepartment
     }
 
-    val acceptDeclareText = if (userLoginType == LoginUserTypeEnum.STUDENT) {
-        stringResource(R.string.declare_amount)
+    val acceptDeclareText = if (requestStatus == RequestStatusEnum.ACCEPTED.name) {
+        stringResource(R.string.edit_text)
     } else {
         stringResource(R.string.approve_text)
     }
@@ -205,7 +203,6 @@ fun PreviewBusStatusItemView() {
         userImageUrl = null,
         userDepartment = "Mechanic",
         userYear = "First",
-        userLoginType = LoginUserTypeEnum.STUDENT,
         pickUpPoint = "Marthandam",
         requestStatus = RequestStatusEnum.REQUESTED.name,
         onApproveClick = {

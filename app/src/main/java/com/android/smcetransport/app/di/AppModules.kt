@@ -12,6 +12,7 @@ import com.android.smcetransport.app.screens.bus_managment.presentation.BusListV
 import com.android.smcetransport.app.screens.bus_request_status.data.BusRequestStatusRepositoryImpl
 import com.android.smcetransport.app.screens.bus_request_status.domain.BusRequestStatusRepository
 import com.android.smcetransport.app.screens.bus_request_status.domain.BusRequestStatusUseCase
+import com.android.smcetransport.app.screens.bus_request_status.presentation.BusRequestStatusApproveViewModel
 import com.android.smcetransport.app.screens.bus_request_status.presentation.BusRequestStatusViewModel
 import com.android.smcetransport.app.screens.dashboard.data.DashboardRepositoryImpl
 import com.android.smcetransport.app.screens.dashboard.domain.DashboardRepository
@@ -96,4 +97,5 @@ val appModule = module {
     viewModelOf(::AddBusViewModel)
     viewModelOf(::ViewPassViewModel)
     viewModelOf(::BusRequestStatusViewModel)
+    viewModelOf(::BusRequestStatusApproveViewModel)
 }

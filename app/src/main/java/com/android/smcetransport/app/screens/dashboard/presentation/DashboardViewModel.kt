@@ -183,6 +183,7 @@ class DashboardViewModel(
                 status = RequestStatusEnum.CANCELLED,
                 staffId = if (loginUserTypeEnum == LoginUserTypeEnum.STAFF) userModel?.id else null,
                 studentId = if (loginUserTypeEnum == LoginUserTypeEnum.STUDENT) userModel?.id else null,
+                busInChargeId = null
             )
             viewModelScope.launch (IO) {
                 dashboardUseCase.sendCancellationForStudentStaff(
