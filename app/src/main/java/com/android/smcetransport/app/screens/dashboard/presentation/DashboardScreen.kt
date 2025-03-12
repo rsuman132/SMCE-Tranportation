@@ -149,7 +149,8 @@ fun DashboardScreen(
                 modifier = Modifier.padding(all = 16.dp),
                 fontSize = 30.sp,
                 fontFamily = FontFamily(semiBoldFont),
-                lineHeight = 36.sp
+                lineHeight = 36.sp,
+                color = colorResource(R.color.black)
             )
 
             if (loginUserTypeEnum != null) {
@@ -313,7 +314,8 @@ fun DashboardScreen(
                             modifier = Modifier.padding(all = 16.dp),
                             fontSize = 30.sp,
                             fontFamily = FontFamily(semiBoldFont),
-                            lineHeight = 36.sp
+                            lineHeight = 36.sp,
+                            color = colorResource(R.color.black)
                         )
 
 
@@ -405,12 +407,14 @@ fun DashboardScreen(
                     Text(
                         text = stringResource(R.string.requesting_new_pass),
                         fontFamily = FontFamily(semiBoldFont),
-                        fontSize = 24.sp
+                        fontSize = 24.sp,
+                        color = colorResource(R.color.black)
                     )
                     Text(
                         text = stringResource(R.string.requesting_new_pass_desc),
                         fontFamily = FontFamily(normalFont),
-                        fontSize = 18.sp
+                        fontSize = 18.sp,
+                        color = colorResource(R.color.black)
                     )
 
                     CommonTextField(
@@ -475,12 +479,14 @@ fun DashboardScreen(
                     Text(
                         text = stringResource(R.string.cancelling_new_pass),
                         fontFamily = FontFamily(semiBoldFont),
-                        fontSize = 24.sp
+                        fontSize = 24.sp,
+                        color = colorResource(R.color.black)
                     )
                     Text(
                         text = stringResource(R.string.cancelling_new_pass_desc),
                         fontFamily = FontFamily(normalFont),
-                        fontSize = 18.sp
+                        fontSize = 18.sp,
+                        color = colorResource(R.color.black)
                     )
 
                     CommonTextField(

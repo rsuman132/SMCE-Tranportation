@@ -80,7 +80,7 @@ class BusRequestStatusApproveViewModel(
                         } ?: listOf()
                         busRequestStatusApproveUIState.update {
                             it.copy(
-                                isBusListApiLoading = true,
+                                isBusListApiLoading = false,
                                 busListDropDownList = dropDownList,
                                 selectedBusDropDown = true,
                                 isBusRequestListLoading = false

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
@@ -33,9 +34,11 @@ fun OverAllDataTableScreen(
             .background(color = colorResource(R.color.white))
     ) {
 
+        val toolBarText = "${overAllDataUIModel.departmentText} • ${overAllDataUIModel.yearText}"
+
         AppToolBar(
             modifier = Modifier.fillMaxWidth(),
-            toolBarText = overAllDataUIModel.toolbarTitle,
+            toolBarText = toolBarText,
             onToolBarStartIconClick = {
                 onBackPressEvent()
             },
@@ -48,22 +51,52 @@ fun OverAllDataTableScreen(
                         .fillMaxSize()
                         .weight(1f)
                 ) {
+                    item {
+                        TableItemView(
+                            modifier = Modifier.fillMaxWidth(),
+                            firstText = stringResource(R.string.name_text),
+                            secondText = stringResource(R.string.start_point_text),
+                            thirdText = stringResource(R.string.amount_text)
+                        )
+                    }
+                    item {
+                        HorizontalDivider(
+                            modifier = Modifier.fillMaxWidth(),
+                            color = colorResource(R.color.black)
+                        )
+                    }
                     overAllDataUIModel.busRequestModelList.forEach {
                         val amountText = it.amount ?: 0.0
                         item {
                             TableItemView(
                                 modifier = Modifier.fillMaxWidth(),
-                                firstText = it.requesterUserModel?.name ?: "-",
-                                secondText = it.pickupPoint?:"-",
+                                firstText = it.requesterUserModel?.name ?: "–",
+                                secondText = it.pickupPoint?:"–",
                                 thirdText = if(amountText > 0.0) {
                                     "$amountText"
                                 } else {
-                                    "-"
+                                    "–"
                                 }
                             )
                         }
                         item {
-                            VerticalDivider(
+                            HorizontalDivider(
+                                modifier = Modifier.fillMaxWidth(),
+                                color = colorResource(R.color.black)
+                            )
+                        }
+                    }
+                    repeat(2) {
+                        item {
+                            TableItemView(
+                                modifier = Modifier.fillMaxWidth(),
+                                firstText = "–",
+                                secondText = "–",
+                                thirdText = "–"
+                            )
+                        }
+                        item {
+                            HorizontalDivider(
                                 modifier = Modifier.fillMaxWidth(),
                                 color = colorResource(R.color.black)
                             )

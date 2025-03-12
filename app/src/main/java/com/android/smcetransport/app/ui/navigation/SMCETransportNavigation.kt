@@ -38,7 +38,7 @@ import com.android.smcetransport.app.screens.otp_verification.presentation.OTPVe
 import com.android.smcetransport.app.screens.otp_verification.presentation.OTPVerificationScreen
 import com.android.smcetransport.app.screens.otp_verification.presentation.OTPVerificationViewModel
 import com.android.smcetransport.app.screens.overall_data.presentation.OverAllDataTableScreen
-import com.android.smcetransport.app.screens.overall_data.presentation.OverAllDataUIModel
+import com.android.smcetransport.app.screens.overall_data.presentation.OverAllDataViewModel
 import com.android.smcetransport.app.screens.request_success.RequestSuccessScreen
 import com.android.smcetransport.app.screens.signup.presentation.SignUpScreen
 import com.android.smcetransport.app.screens.signup.presentation.SignUpScreenActionEvent
@@ -482,11 +482,27 @@ fun SMCETransportApp(
                         }
 
                         is DepartmentActionEvent.OnStudentYearListDialogShowHideEvent -> {
-                            departmentListViewModel.updateYearListDialog(event.show, event.selectedId)
+                            departmentListViewModel.updateYearListDialog(
+                                show = event.show,
+                                selectedDeptId = event.selectedId,
+                                selectedDepartmentName = event.selectedDepartmentName
+                            )
                         }
 
                         is DepartmentActionEvent.OnSelectedYearOrStaffId -> {
-                            
+                            navController.navigate(
+                                OverAllScreenRoute(
+                                    departmentId = departmentListUIState.selectedDepartmentId ?: "",
+                                    department = departmentListUIState.selectedDepartmentName ?: "",
+                                    loginTypeEnum = event.loginUserTypeEnum,
+                                    yearText = event.selectedYearOrStaff ?: ""
+                                )
+                            )
+                            departmentListViewModel.updateYearListDialog(
+                                show = false,
+                                selectedDeptId = null,
+                                selectedDepartmentName = null
+                            )
                         }
                     }
                 }
@@ -753,12 +769,30 @@ fun SMCETransportApp(
 
         }
 
-
         //Over All Data Screen
         composable<OverAllScreenRoute> {
+            val overAllScreenRoute = it.toRoute<OverAllScreenRoute>()
+            val overAllDataViewModel : OverAllDataViewModel = koinViewModel()
+            val overAllDataUIModel by overAllDataViewModel.overAllDataUIModel.collectAsState()
+
+            LaunchedEffect(Unit) {
+                overAllDataViewModel.errorMessage.collectLatest { errorMsg ->
+                    context.showToast(errorMsg)
+                }
+            }
+
+            LaunchedEffect(Unit) {
+                overAllDataViewModel.updateInitialValues(
+                    departmentText = overAllScreenRoute.department,
+                    departmentId = overAllScreenRoute.departmentId,
+                    loginUserTypeEnum = overAllScreenRoute.loginTypeEnum,
+                    yearText = overAllScreenRoute.yearText
+                )
+            }
+
             OverAllDataTableScreen(
                 modifier = modifier,
-                overAllDataUIModel = OverAllDataUIModel(),
+                overAllDataUIModel = overAllDataUIModel,
                 onBackPressEvent = {
                     navController.navigateUp()
                 }

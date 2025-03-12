@@ -13,6 +13,11 @@ object ApiUrls{
         "$BASE_URL/api/staffbusrequest/getStaffBusRequestsByStatusAndStaffId"
     const val GET_STUDENT_BUS_REQUEST_BY_STATUS =
         "$BASE_URL/api/studentbusrequest/getStudentBusRequestsByStatus"
-    const val GET_STAFF_BUS_REQUEST_BY_STATUS = "$BASE_URL/api/staffbusrequest/getStaffBusRequestsByStatus"
+    const val GET_STAFF_BUS_REQUEST_BY_STATUS =
+        "$BASE_URL/api/staffbusrequest/getStaffBusRequestsByStatus"
+    const val GET_STUDENT_BUS_REQUEST_BY_STATUS_DEPARTMENT =
+        "$BASE_URL/api/studentbusrequest/getStudentBusRequestsByStatusAndDepartment"
+    const val GET_STAFF_BUS_REQUEST_BY_STATUS_DEPARTMENT =
+        "$BASE_URL/api/staffbusrequest/getStaffBusRequestsByStatusAndDepartment"
 
 }

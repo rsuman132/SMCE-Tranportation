@@ -96,7 +96,8 @@ fun TitleWithButtonInfoDialog (
                 text = dialogText,
                 fontFamily = FontFamily(mediumFont),
                 fontSize = 20.sp,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = colorResource(R.color.black)
             )
 
             AppButton(

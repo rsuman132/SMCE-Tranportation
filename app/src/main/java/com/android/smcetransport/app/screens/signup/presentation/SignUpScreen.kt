@@ -168,32 +168,34 @@ fun SignUpScreen(
                         imeAction = ImeAction.Next
                     )
                 )
-                CommonDropDown(
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 4.dp),
-                    etValue = signUpUIState.userDepartment,
-                    onEtValueChangeListener = {},
-                    etPlaceHolder = stringResource(R.string.select_your_department),
-                    isShowError = !signUpUIState.isValidUserDepartment,
-                    etErrorText = stringResource(R.string.select_your_department_error),
-                    dropDownList = signUpUIState.departmentList,
-                    isDropDownExpanded = signUpUIState.isDepartmentDropDownExpanded,
-                    isEnable = signUpUIState.isEnableDepartmentDropDown,
-                    onDropDownClickAndExpandedState = { dropDownModel, isExpanded ->
-                        if (signUpUIState.departmentList.isNotEmpty()) {
-                            onSignUpScreenActionEvent(
-                                SignUpScreenActionEvent.OnUserDepartmentChangeEvent(
-                                    departmentText = dropDownModel?.dropDownText,
-                                    departmentId = dropDownModel?.dropDownId,
-                                    isExpanded = isExpanded
+                if (signUpUIState.loginUserTypeEnum == LoginUserTypeEnum.STUDENT || signUpUIState.loginUserTypeEnum == LoginUserTypeEnum.STAFF) {
+                    CommonDropDown(
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp),
+                        etValue = signUpUIState.userDepartment,
+                        onEtValueChangeListener = {},
+                        etPlaceHolder = stringResource(R.string.select_your_department),
+                        isShowError = !signUpUIState.isValidUserDepartment,
+                        etErrorText = stringResource(R.string.select_your_department_error),
+                        dropDownList = signUpUIState.departmentList,
+                        isDropDownExpanded = signUpUIState.isDepartmentDropDownExpanded,
+                        isEnable = signUpUIState.isEnableDepartmentDropDown,
+                        onDropDownClickAndExpandedState = { dropDownModel, isExpanded ->
+                            if (signUpUIState.departmentList.isNotEmpty()) {
+                                onSignUpScreenActionEvent(
+                                    SignUpScreenActionEvent.OnUserDepartmentChangeEvent(
+                                        departmentText = dropDownModel?.dropDownText,
+                                        departmentId = dropDownModel?.dropDownId,
+                                        isExpanded = isExpanded
+                                    )
                                 )
-                            )
-                        } else {
-                            onSignUpScreenActionEvent(SignUpScreenActionEvent.OnDepartmentApiEvent)
+                            } else {
+                                onSignUpScreenActionEvent(SignUpScreenActionEvent.OnDepartmentApiEvent)
+                            }
                         }
-                    }
-                )
+                    )
+                }
                 if (signUpUIState.loginUserTypeEnum == LoginUserTypeEnum.STUDENT) {
                     CommonDropDown(
                         modifier = modifier

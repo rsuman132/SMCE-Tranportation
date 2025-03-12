@@ -119,7 +119,8 @@ fun BusStatusItemView(
                 Text(
                     text = userNameWithCollegeId,
                     fontFamily = FontFamily(mediumFont),
-                    fontSize = 18.sp
+                    fontSize = 18.sp,
+                    color = colorResource(R.color.black)
                 )
                 Text(
                     text = userDepartmentWithYear,
@@ -131,7 +132,8 @@ fun BusStatusItemView(
         Text(
             text = "${stringResource(R.string.start_point_text)}: $pickUpPoint",
             fontSize = 16.sp,
-            fontFamily = FontFamily(mediumFont)
+            fontFamily = FontFamily(mediumFont),
+            color = colorResource(R.color.black)
         )
 
         if (requestStatus?.lowercase() != RequestStatusEnum.CANCELLED.name.lowercase()) {

@@ -158,10 +158,16 @@ class SignUpViewModel(
                 isValidUserCollegeId = isValidCollegeId
             )
         }
-        val isAllInputsAreValid = if (newSignUpUIState.loginUserTypeEnum == LoginUserTypeEnum.STUDENT) {
-            isValidProfileImg && isValidUserName && isValidDepartment && isValidYear && isUserAddress && isValidCollegeId
-        } else {
-            isValidProfileImg && isValidUserName && isValidDepartment && isUserAddress && isValidCollegeId
+        val isAllInputsAreValid = when (newSignUpUIState.loginUserTypeEnum) {
+            LoginUserTypeEnum.STUDENT -> {
+                isValidProfileImg && isValidUserName && isValidDepartment && isValidYear && isUserAddress && isValidCollegeId
+            }
+            LoginUserTypeEnum.STAFF -> {
+                isValidProfileImg && isValidUserName && isValidDepartment && isUserAddress && isValidCollegeId
+            }
+            else -> {
+                isValidProfileImg && isValidUserName && isUserAddress && isValidCollegeId
+            }
         }
         if (!isAllInputsAreValid) {
             return

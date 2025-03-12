@@ -127,6 +127,8 @@
     <string name="cancel_confirmation_desc">By entering cancel reason and tap cancel button to confirm the cancellation for the request</string>
     <string name="enter_amount_text">Enter amount</string>
     <string name="enter_amount_error_text">Enter valid amount</string>
+    <string name="select_your_bus">Select bus</string>
+    <string name="select_your_bus_error">Please select bus</string>
 
 
     <!-- Over All Data -->

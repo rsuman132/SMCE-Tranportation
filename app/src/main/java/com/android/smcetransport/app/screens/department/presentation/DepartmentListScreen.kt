@@ -56,6 +56,8 @@ fun DepartmentListScreen(
         painterResource(R.drawable.ic_add)
     }
 
+    val staffText = stringResource(R.string.staff_text)
+
     Box(modifier = modifier.fillMaxSize()
         .background(color = colorResource(R.color.white)),
         contentAlignment = Alignment.Center
@@ -243,9 +245,11 @@ fun DepartmentListScreen(
                         fontFamily = FontFamily(mediumFont),
                         color = colorResource(R.color.black),
                         modifier = Modifier.fillMaxWidth().clickable {
-                            DepartmentActionEvent.OnSelectedYearOrStaffId(
-                                selectedYearOrStaff = null,
-                                loginUserTypeEnum = LoginUserTypeEnum.STAFF
+                            onDepartmentActionEvent(
+                                DepartmentActionEvent.OnSelectedYearOrStaffId(
+                                    selectedYearOrStaff = staffText,
+                                    loginUserTypeEnum = LoginUserTypeEnum.STAFF
+                                )
                             )
                         }.padding(16.dp)
                     )

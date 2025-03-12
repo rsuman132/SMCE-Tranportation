@@ -163,11 +163,16 @@ class DepartmentListViewModel(
     }
 
 
-    fun updateYearListDialog(show : Boolean, selectedDeptId : String?) {
+    fun updateYearListDialog(
+        show : Boolean,
+        selectedDeptId : String?,
+        selectedDepartmentName : String?
+    ) {
         departmentListUIState.update {
             it.copy(
                 showYearAndStaffDialog = show,
-                selectedDepartmentId = selectedDeptId
+                selectedDepartmentId = selectedDeptId,
+                selectedDepartmentName = selectedDepartmentName
             )
         }
     }
