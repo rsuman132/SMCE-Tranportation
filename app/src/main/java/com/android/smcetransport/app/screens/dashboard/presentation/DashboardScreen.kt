@@ -302,7 +302,7 @@ fun DashboardScreen(
                                 cardItemBgColor = colorResource(android.R.color.holo_blue_bright),
                                 cardItemIcon = painterResource(R.drawable.ic_data_check),
                                 onItemClick = {
-
+                                    onDashboardActionEvents(DashboardActionEvents.OnOverDataPageClickEvent)
                                 }
                             )
 

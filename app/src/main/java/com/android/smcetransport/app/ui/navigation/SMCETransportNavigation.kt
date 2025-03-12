@@ -37,6 +37,8 @@ import com.android.smcetransport.app.screens.mobile_login.MobileLoginViewModel
 import com.android.smcetransport.app.screens.otp_verification.presentation.OTPVerificationActionEvent
 import com.android.smcetransport.app.screens.otp_verification.presentation.OTPVerificationScreen
 import com.android.smcetransport.app.screens.otp_verification.presentation.OTPVerificationViewModel
+import com.android.smcetransport.app.screens.overall_data.presentation.OverAllDataTableScreen
+import com.android.smcetransport.app.screens.overall_data.presentation.OverAllDataUIModel
 import com.android.smcetransport.app.screens.request_success.RequestSuccessScreen
 import com.android.smcetransport.app.screens.signup.presentation.SignUpScreen
 import com.android.smcetransport.app.screens.signup.presentation.SignUpScreenActionEvent
@@ -52,7 +54,6 @@ import com.android.smcetransport.app.screens.walkthrough.WalkThroughViewModel
 import com.android.smcetransport.app.utils.ContextExtension.showToast
 import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.serialization.builtins.serializer
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -356,7 +357,7 @@ fun SMCETransportApp(
                         }
 
                         is DashboardActionEvents.OnManageDepartmentClickEvent -> {
-                            navController.navigate(DepartmentScreenRoute)
+                            navController.navigate(DepartmentScreenRoute(isFromOverAllData = false))
                         }
 
                         is DashboardActionEvents.OnManageBusClickEvent -> {
@@ -431,6 +432,10 @@ fun SMCETransportApp(
                             dashboardViewModel.setBusRequestStatus(it.requestStatusEnum)
                             navController.navigate(BusRequestStatusRoute)
                         }
+
+                        is DashboardActionEvents.OnOverDataPageClickEvent -> {
+                            navController.navigate(DepartmentScreenRoute(isFromOverAllData = true))
+                        }
                     }
                 }
             )
@@ -440,18 +445,23 @@ fun SMCETransportApp(
         composable<DepartmentScreenRoute> {
             val departmentListViewModel : DepartmentListViewModel = koinViewModel()
             val departmentListUIState by departmentListViewModel.departmentListUIState.collectAsState()
+            val departScreenRoute = it.toRoute<DepartmentScreenRoute>()
 
             LaunchedEffect(Unit) {
-                departmentListViewModel.errorMessage.collectLatest {
-                    context.showToast(it)
+                departmentListViewModel.errorMessage.collectLatest { msg ->
+                    context.showToast(msg)
                 }
+            }
+
+            LaunchedEffect(Unit) {
+                departmentListViewModel.updateIsFromOverAllData(departScreenRoute.isFromOverAllData)
             }
 
             DepartmentListScreen(
                 modifier = modifier,
                 departmentListUIState = departmentListUIState,
-                onDepartmentActionEvent = {
-                    when(it) {
+                onDepartmentActionEvent = { event ->
+                    when(event) {
                         is DepartmentActionEvent.OnBackPressEvent -> {
                             navController.navigateUp()
                         }
@@ -462,13 +472,21 @@ fun SMCETransportApp(
                             departmentListViewModel.addDepartmentValidation()
                         }
                         is DepartmentActionEvent.OnDepartmentCodeUpdate -> {
-                            departmentListViewModel.updateDepartmentCode(it.code)
+                            departmentListViewModel.updateDepartmentCode(event.code)
                         }
                         is DepartmentActionEvent.OnDepartmentNameUpdate -> {
-                            departmentListViewModel.updateDepartmentName(it.name)
+                            departmentListViewModel.updateDepartmentName(event.name)
                         }
                         is DepartmentActionEvent.OnAddDepartmentDialogDismiss -> {
                             departmentListViewModel.updateDepartmentDialog(false)
+                        }
+
+                        is DepartmentActionEvent.OnStudentYearListDialogShowHideEvent -> {
+                            departmentListViewModel.updateYearListDialog(event.show, event.selectedId)
+                        }
+
+                        is DepartmentActionEvent.OnSelectedYearOrStaffId -> {
+                            
                         }
                     }
                 }
@@ -733,6 +751,18 @@ fun SMCETransportApp(
                 }
             )
 
+        }
+
+
+        //Over All Data Screen
+        composable<OverAllScreenRoute> {
+            OverAllDataTableScreen(
+                modifier = modifier,
+                overAllDataUIModel = OverAllDataUIModel(),
+                onBackPressEvent = {
+                    navController.navigateUp()
+                }
+            )
         }
 
 

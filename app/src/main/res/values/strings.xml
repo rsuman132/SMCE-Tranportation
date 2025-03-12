@@ -129,4 +129,8 @@
     <string name="enter_amount_error_text">Enter valid amount</string>
 
 
+    <!-- Over All Data -->
+    <string name="no_data_found">Oops, No data found</string>
+
+
 </resources>

@@ -1,6 +1,7 @@
 package com.android.smcetransport.app.screens.department.presentation
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,6 +33,8 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.android.smcetransport.app.R
 import com.android.smcetransport.app.core.dto.DepartmentModel
+import com.android.smcetransport.app.core.enum.LoginUserTypeEnum
+import com.android.smcetransport.app.core.enum.StudentYearEnum
 import com.android.smcetransport.app.ui.components.AppButton
 import com.android.smcetransport.app.ui.components.AppToolBar
 import com.android.smcetransport.app.ui.components.CommonTextField
@@ -44,6 +48,14 @@ fun DepartmentListScreen(
     onDepartmentActionEvent : (DepartmentActionEvent) -> Unit
 ) {
 
+    val fivePercentageRoundedCorner = RoundedCornerShape(5)
+
+    val firstRightIcon = if (departmentListUIState.isFromOverAllData) {
+        null
+    } else {
+        painterResource(R.drawable.ic_add)
+    }
+
     Box(modifier = modifier.fillMaxSize()
         .background(color = colorResource(R.color.white)),
         contentAlignment = Alignment.Center
@@ -56,7 +68,7 @@ fun DepartmentListScreen(
                     onDepartmentActionEvent(DepartmentActionEvent.OnBackPressEvent)
                 },
                 isShowLoading = departmentListUIState.isLoading,
-                firstRightIcon = painterResource(R.drawable.ic_add),
+                firstRightIcon = firstRightIcon,
                 onFirstRightIconClick = {
                     onDepartmentActionEvent(DepartmentActionEvent.OnAddDepartmentEvent)
                 }
@@ -77,10 +89,24 @@ fun DepartmentListScreen(
                                 it.departmentCode ?: "${System.currentTimeMillis()}"
                             }
                         ) {
+
+                            val onItemClick = if (departmentListUIState.isFromOverAllData) {
+                                {
+                                    onDepartmentActionEvent(DepartmentActionEvent.OnStudentYearListDialogShowHideEvent(
+                                        show = true,
+                                        selectedId = it.id,
+                                        selectedDepartmentName = it.departmentName
+                                    ))
+                                }
+                            } else {
+                                null
+                            }
+
                             TitleDescCardItem(
                                 modifier = Modifier.fillMaxWidth(),
                                 titleText = it.departmentName ?: "",
-                                descText = it.departmentCode ?: ""
+                                descText = it.departmentCode ?: "",
+                                onItemClick = onItemClick
                             )
                         }
                     }
@@ -118,7 +144,7 @@ fun DepartmentListScreen(
                 Column(
                     modifier = Modifier.fillMaxWidth()
                         .padding(16.dp)
-                        .clip(shape = RoundedCornerShape(5))
+                        .clip(shape = fivePercentageRoundedCorner)
                         .background(color = colorResource(R.color.white))
                         .padding(24.dp),
                     verticalArrangement = Arrangement.spacedBy(24.dp)
@@ -173,6 +199,61 @@ fun DepartmentListScreen(
             }
         }
 
+        if (departmentListUIState.showYearAndStaffDialog) {
+            Dialog(
+                onDismissRequest = {
+                    onDepartmentActionEvent(DepartmentActionEvent.OnStudentYearListDialogShowHideEvent(
+                        show = false,
+                        selectedId = null,
+                        selectedDepartmentName = null
+                    ))
+                },
+                properties = DialogProperties(
+                    usePlatformDefaultWidth = false
+                )
+            ) {
+
+                Column(
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(16.dp)
+                        .clip(shape = fivePercentageRoundedCorner)
+                        .background(color = colorResource(R.color.white))
+                        .padding(16.dp)
+                ) {
+                    StudentYearEnum.entries.forEach {
+                        Text(
+                            it.name,
+                            fontSize = 18.sp,
+                            fontFamily = FontFamily(mediumFont),
+                            color = colorResource(R.color.black),
+                            modifier = Modifier.fillMaxWidth().clickable {
+                                onDepartmentActionEvent(
+                                    DepartmentActionEvent.OnSelectedYearOrStaffId(
+                                        selectedYearOrStaff = it.name,
+                                        loginUserTypeEnum = LoginUserTypeEnum.STUDENT
+                                    )
+                                )
+                            }.padding(16.dp)
+                        )
+                        HorizontalDivider()
+                    }
+                    Text(
+                        stringResource(R.string.staff_text),
+                        fontSize = 18.sp,
+                        fontFamily = FontFamily(mediumFont),
+                        color = colorResource(R.color.black),
+                        modifier = Modifier.fillMaxWidth().clickable {
+                            DepartmentActionEvent.OnSelectedYearOrStaffId(
+                                selectedYearOrStaff = null,
+                                loginUserTypeEnum = LoginUserTypeEnum.STAFF
+                            )
+                        }.padding(16.dp)
+                    )
+                }
+
+            }
+        }
+
     }
 
 }
@@ -207,7 +288,8 @@ fun PreviewDepartmentListScreen() {
                     departmentCode = "CSE"
                 )
             ),
-            isShowAddDepartmentDialog = true
+            isShowAddDepartmentDialog = false,
+            showYearAndStaffDialog = true
         ),
         onDepartmentActionEvent = {
 

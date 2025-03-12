@@ -10,5 +10,8 @@ data class DepartmentListUIState(
     val departmentCodeEtValue : String = "",
     val isAddDepartmentButtonLoading : Boolean = false,
     val showDepartmentError : Boolean = false,
-    val showDepartmentCodeError : Boolean = false
+    val showDepartmentCodeError : Boolean = false,
+    val isFromOverAllData : Boolean = false,
+    val showYearAndStaffDialog : Boolean = false,
+    val selectedDepartmentId : String? = null
 )

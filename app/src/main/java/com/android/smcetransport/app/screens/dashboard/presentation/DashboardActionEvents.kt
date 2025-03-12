@@ -40,4 +40,6 @@ sealed class DashboardActionEvents {
     data class OnBusStatusRequestClickEvent(
         val requestStatusEnum: RequestStatusEnum
     ) : DashboardActionEvents()
+
+    data object OnOverDataPageClickEvent : DashboardActionEvents()
 }
