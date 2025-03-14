@@ -99,9 +99,9 @@ class SharedPrefs(context : Context) {
     }
 
 
-    fun setRequestStateType(requestStatusEnum: RequestStatusEnum) {
+    fun setRequestStateType(requestStatusEnum: RequestStatusEnum?) {
         editor.apply {
-            putString(REQUESTING_STATUS_KEY, requestStatusEnum.name)
+            putString(REQUESTING_STATUS_KEY, requestStatusEnum?.name)
             apply()
         }
     }

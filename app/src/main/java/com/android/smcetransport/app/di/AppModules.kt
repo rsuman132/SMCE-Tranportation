@@ -27,10 +27,6 @@ import com.android.smcetransport.app.screens.otp_verification.data.OTPVerificati
 import com.android.smcetransport.app.screens.otp_verification.domain.OTPVerificationRepository
 import com.android.smcetransport.app.screens.otp_verification.domain.OTPVerificationUseCase
 import com.android.smcetransport.app.screens.otp_verification.presentation.OTPVerificationViewModel
-import com.android.smcetransport.app.screens.overall_data.data.OverAllDataRepositoryImpl
-import com.android.smcetransport.app.screens.overall_data.domain.OverAllDataRepository
-import com.android.smcetransport.app.screens.overall_data.domain.OverAllDataUseCase
-import com.android.smcetransport.app.screens.overall_data.presentation.OverAllDataViewModel
 import com.android.smcetransport.app.screens.signup.data.SignUpRepositoryImpl
 import com.android.smcetransport.app.screens.signup.domain.SignUpRepository
 import com.android.smcetransport.app.screens.signup.domain.SignUpUseCase
@@ -76,9 +72,6 @@ val appModule = module {
     singleOf(::BusRequestStatusRepositoryImpl) {
         bind<BusRequestStatusRepository>()
     }
-    singleOf(::OverAllDataRepositoryImpl) {
-        bind<OverAllDataRepository>()
-    }
 
     factoryOf(::SharedPrefs)
     factoryOf(::OTPVerificationUseCase)
@@ -92,7 +85,6 @@ val appModule = module {
     factoryOf(::ViewPassRepositoryUseCase)
     factoryOf(::BusRequestStatusUseCase)
     factoryOf(::CommonLogout)
-    factoryOf(::OverAllDataUseCase)
 
     viewModelOf(::SplashScreenViewModel)
     viewModelOf(::WalkThroughViewModel)
@@ -106,5 +98,4 @@ val appModule = module {
     viewModelOf(::ViewPassViewModel)
     viewModelOf(::BusRequestStatusViewModel)
     viewModelOf(::BusRequestStatusApproveViewModel)
-    viewModelOf(::OverAllDataViewModel)
 }

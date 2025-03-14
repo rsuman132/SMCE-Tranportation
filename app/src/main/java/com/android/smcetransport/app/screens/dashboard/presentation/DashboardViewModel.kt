@@ -247,7 +247,7 @@ class DashboardViewModel(
 
 
     fun setBusRequestStatus(
-        requestStatusEnum: RequestStatusEnum
+        requestStatusEnum: RequestStatusEnum?
     ) {
         sharedPrefs.setRequestStateType(requestStatusEnum)
     }

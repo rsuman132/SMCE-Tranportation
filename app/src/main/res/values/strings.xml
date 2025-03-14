@@ -107,6 +107,7 @@
     <string name="bus_no_text">Bus no</string>
     <string name="not_set_text">Not set</string>
     <string name="name_text">Name</string>
+    <string name="college_id">College Id</string>
     <string name="start_point_text">Start point</string>
     <string name="via_route_text">Via route</string>
     <string name="amount_text">Amount</string>
@@ -130,9 +131,6 @@
     <string name="select_your_bus">Select bus</string>
     <string name="select_your_bus_error">Please select bus</string>
 
-
-    <!-- Over All Data -->
-    <string name="no_data_found">Oops, No data found</string>
 
 
 </resources>

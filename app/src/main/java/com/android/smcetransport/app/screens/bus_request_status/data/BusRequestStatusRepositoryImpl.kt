@@ -27,9 +27,15 @@ class BusRequestStatusRepositoryImpl(
     override suspend fun getStudentBusRequestByStatus(
         busRequestStatusRequestModel: BusRequestStatusRequestModel
     ): Flow<NetworkResult<BaseApiClass<List<BusRequestModel>>>> {
-        val httpStatement = ktorHttpClient.httpClientAndroid().preparePost {
-            url(ApiUrls.GET_STUDENT_BUS_REQUEST_BY_STATUS)
-            setBody(busRequestStatusRequestModel)
+        val httpStatement = if (busRequestStatusRequestModel.status != null) {
+            ktorHttpClient.httpClientAndroid().preparePost {
+                url(ApiUrls.GET_STUDENT_BUS_REQUEST_BY_STATUS)
+                setBody(busRequestStatusRequestModel)
+            }
+        } else {
+            ktorHttpClient.httpClientAndroid().prepareGet {
+                url(ApiUrls.GET_ALL_STUDENT_BUS_REQUEST)
+            }
         }
         return apiExecution.executeApi<List<BusRequestModel>>(httpStatement)
     }
@@ -38,9 +44,15 @@ class BusRequestStatusRepositoryImpl(
     override suspend fun getStaffBusRequestByStatus(
         busRequestStatusRequestModel: BusRequestStatusRequestModel
     ): Flow<NetworkResult<BaseApiClass<List<BusRequestModel>>>> {
-        val httpStatement = ktorHttpClient.httpClientAndroid().preparePost {
-            url(ApiUrls.GET_STAFF_BUS_REQUEST_BY_STATUS)
-            setBody(busRequestStatusRequestModel)
+        val httpStatement = if (busRequestStatusRequestModel.status != null) {
+            ktorHttpClient.httpClientAndroid().preparePost {
+                url(ApiUrls.GET_STAFF_BUS_REQUEST_BY_STATUS)
+                setBody(busRequestStatusRequestModel)
+            }
+        } else {
+            ktorHttpClient.httpClientAndroid().prepareGet {
+                url(ApiUrls.GET_ALL_STAFF_BUS_REQUEST)
+            }
         }
         return apiExecution.executeApi<List<BusRequestModel>>(httpStatement)
     }

@@ -40,6 +40,9 @@ fun BusStatusItemView(
     userImageUrl : String?,
     userDepartment : String,
     userYear : String?,
+    amountText : String?,
+    busNo : String?,
+    busViaRoute : String?,
     pickUpPoint : String,
     requestStatus : String?,
     onCancelClick : () -> Unit,
@@ -136,6 +139,24 @@ fun BusStatusItemView(
             color = colorResource(R.color.black)
         )
 
+        if (amountText != null) {
+            Text(
+                text = "${stringResource(R.string.amount_text)}: $amountText",
+                fontSize = 16.sp,
+                fontFamily = FontFamily(mediumFont),
+                color = colorResource(R.color.black)
+            )
+        }
+
+        if (busNo != null && busViaRoute != null) {
+            Text(
+                text = "${stringResource(R.string.bus_no_text)}: $busNo • $busViaRoute",
+                fontSize = 16.sp,
+                fontFamily = FontFamily(mediumFont),
+                color = colorResource(R.color.black)
+            )
+        }
+
         if (requestStatus?.lowercase() != RequestStatusEnum.CANCELLED.name.lowercase()) {
             Row(
                 modifier = Modifier
@@ -205,6 +226,9 @@ fun PreviewBusStatusItemView() {
         userImageUrl = null,
         userDepartment = "Mechanic",
         userYear = "First",
+        amountText = "10.00",
+        busNo = "1",
+        busViaRoute = "Via Thuckalay",
         pickUpPoint = "Marthandam",
         requestStatus = RequestStatusEnum.REQUESTED.name,
         onApproveClick = {

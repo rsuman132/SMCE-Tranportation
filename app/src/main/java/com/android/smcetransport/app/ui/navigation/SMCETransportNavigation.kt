@@ -37,8 +37,6 @@ import com.android.smcetransport.app.screens.mobile_login.MobileLoginViewModel
 import com.android.smcetransport.app.screens.otp_verification.presentation.OTPVerificationActionEvent
 import com.android.smcetransport.app.screens.otp_verification.presentation.OTPVerificationScreen
 import com.android.smcetransport.app.screens.otp_verification.presentation.OTPVerificationViewModel
-import com.android.smcetransport.app.screens.overall_data.presentation.OverAllDataTableScreen
-import com.android.smcetransport.app.screens.overall_data.presentation.OverAllDataViewModel
 import com.android.smcetransport.app.screens.request_success.RequestSuccessScreen
 import com.android.smcetransport.app.screens.signup.presentation.SignUpScreen
 import com.android.smcetransport.app.screens.signup.presentation.SignUpScreenActionEvent
@@ -434,7 +432,8 @@ fun SMCETransportApp(
                         }
 
                         is DashboardActionEvents.OnOverDataPageClickEvent -> {
-                            navController.navigate(DepartmentScreenRoute(isFromOverAllData = true))
+                            dashboardViewModel.setBusRequestStatus(null)
+                            navController.navigate(BusRequestStatusRoute)
                         }
                     }
                 }
@@ -768,37 +767,6 @@ fun SMCETransportApp(
             )
 
         }
-
-        //Over All Data Screen
-        composable<OverAllScreenRoute> {
-            val overAllScreenRoute = it.toRoute<OverAllScreenRoute>()
-            val overAllDataViewModel : OverAllDataViewModel = koinViewModel()
-            val overAllDataUIModel by overAllDataViewModel.overAllDataUIModel.collectAsState()
-
-            LaunchedEffect(Unit) {
-                overAllDataViewModel.errorMessage.collectLatest { errorMsg ->
-                    context.showToast(errorMsg)
-                }
-            }
-
-            LaunchedEffect(Unit) {
-                overAllDataViewModel.updateInitialValues(
-                    departmentText = overAllScreenRoute.department,
-                    departmentId = overAllScreenRoute.departmentId,
-                    loginUserTypeEnum = overAllScreenRoute.loginTypeEnum,
-                    yearText = overAllScreenRoute.yearText
-                )
-            }
-
-            OverAllDataTableScreen(
-                modifier = modifier,
-                overAllDataUIModel = overAllDataUIModel,
-                onBackPressEvent = {
-                    navController.navigateUp()
-                }
-            )
-        }
-
 
     }
 }

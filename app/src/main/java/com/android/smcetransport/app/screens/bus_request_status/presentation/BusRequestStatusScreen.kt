@@ -146,6 +146,11 @@ fun BusRequestStatusScreen(
                                     items(busRequestStatusUIState.busRequestStatusStudentList, key = {
                                         "${it.id}"
                                     }) {
+                                        val amountText = if (it.amount != null && it.amount > 0.0) {
+                                            "${it.amount}"
+                                        } else {
+                                            null
+                                        }
                                         BusStatusItemView(
                                             modifier = Modifier.fillMaxWidth(),
                                             userName = "${it.requesterUserModel?.name}",
@@ -153,6 +158,9 @@ fun BusRequestStatusScreen(
                                             userImageUrl = it.requesterUserModel?.imageUrl,
                                             userDepartment = "${it.requesterUserModel?.departmentModel?.departmentName}",
                                             userYear = it.requesterUserModel?.year,
+                                            amountText = amountText,
+                                            busNo = it.busAndRouteModel?.busNumber,
+                                            busViaRoute = it.busAndRouteModel?.busRoute,
                                             pickUpPoint = "${it.pickupPoint}",
                                             requestStatus = it.status,
                                             onCancelClick = {
@@ -208,6 +216,11 @@ fun BusRequestStatusScreen(
                                     items(busRequestStatusUIState.busRequestStatusStaffList, key = {
                                         "${it.id}"
                                     }) {
+                                        val amountText = if (it.amount != null && it.amount > 0.0) {
+                                            "${it.amount}"
+                                        } else {
+                                            null
+                                        }
                                         BusStatusItemView(
                                             modifier = Modifier.fillMaxWidth(),
                                             userName = "${it.requesterUserModel?.name}",
@@ -216,6 +229,9 @@ fun BusRequestStatusScreen(
                                             userDepartment = "${it.requesterUserModel?.departmentModel?.departmentName}",
                                             userYear = it.requesterUserModel?.year,
                                             pickUpPoint = "${it.pickupPoint}",
+                                            amountText = amountText,
+                                            busNo = it.busAndRouteModel?.busNumber,
+                                            busViaRoute = it.busAndRouteModel?.busRoute,
                                             requestStatus = it.status,
                                             onCancelClick = {
                                                 onBusRequestPageActionEvent(BusRequestPageActionEvent.UpdateCancelSelectedId(
@@ -331,9 +347,7 @@ fun BusRequestStatusScreen(
 fun PreviewRequestStatusScreen() {
     BusRequestStatusScreen(
         modifier = Modifier.fillMaxSize(),
-        busRequestStatusUIState = BusRequestStatusUIState(
-            isShowCancelDialog = true
-        ),
+        busRequestStatusUIState = BusRequestStatusUIState(),
         onBusRequestPageActionEvent = {
 
         }

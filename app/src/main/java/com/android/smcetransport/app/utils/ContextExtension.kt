@@ -41,36 +41,46 @@ object ContextExtension {
                 ),
                 TitleDescModel(
                     id = "2",
+                    title = resources.getString(R.string.college_id),
+                    descText = "${data.requesterUserModel?.collegeOrStaffId}"
+                ),
+                TitleDescModel(
+                    id = "3",
+                    title = resources.getString(R.string.phone_number_text),
+                    descText = "${data.requesterUserModel?.phone}"
+                ),
+                TitleDescModel(
+                    id = "4",
                     title = resources.getString(R.string.departments_text),
                     descText = "${data.requesterUserModel?.departmentModel?.departmentName}"
                 ),
                 TitleDescModel(
-                    id = "3",
+                    id = "5",
                     title = resources.getString(R.string.year_text),
                     descText = "${data.requesterUserModel?.year}"
                 ),
                 TitleDescModel(
-                    id = "4",
+                    id = "6",
                     title = resources.getString(R.string.bus_no_text),
                     descText = data.busAndRouteModel?.busNumber ?: notSetText
                 ),
                 TitleDescModel(
-                    id = "5",
+                    id = "7",
                     title = resources.getString(R.string.start_point_text),
                     descText = data.pickupPoint ?: notSetText
                 ),
                 TitleDescModel(
-                    id = "6",
+                    id = "8",
                     title = resources.getString(R.string.via_route_text),
                     descText = data.busAndRouteModel?.busRoute ?: notSetText
                 ),
                 TitleDescModel(
-                    id = "7",
+                    id = "9",
                     title = resources.getString(R.string.amount_text),
                     descText = amountText
                 ),
                 TitleDescModel(
-                    id = "8",
+                    id = "10",
                     title = resources.getString(R.string.status_text),
                     descText = requestedStatusEnumToString ?: notSetText
                 )

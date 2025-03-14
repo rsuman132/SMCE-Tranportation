@@ -2,7 +2,7 @@ package com.android.smcetransport.app.core.network
 
 object ApiUrls{
 
-    const val BASE_URL = "http://192.168.176.107:8000"
+    const val BASE_URL = "http://192.168.1.42:8000"
     const val CREATE_DEPARTMENT = "$BASE_URL/api/department/create"
     const val CREATE_BUS = "$BASE_URL/api/bus/create"
     const val GET_ALL_BUS = "$BASE_URL/api/bus/getAll"
@@ -15,9 +15,7 @@ object ApiUrls{
         "$BASE_URL/api/studentbusrequest/getStudentBusRequestsByStatus"
     const val GET_STAFF_BUS_REQUEST_BY_STATUS =
         "$BASE_URL/api/staffbusrequest/getStaffBusRequestsByStatus"
-    const val GET_STUDENT_BUS_REQUEST_BY_STATUS_DEPARTMENT =
-        "$BASE_URL/api/studentbusrequest/getStudentBusRequestsByStatusAndDepartment"
-    const val GET_STAFF_BUS_REQUEST_BY_STATUS_DEPARTMENT =
-        "$BASE_URL/api/staffbusrequest/getStaffBusRequestsByStatusAndDepartment"
+    const val GET_ALL_STUDENT_BUS_REQUEST = "$BASE_URL/api/studentbusrequest/getAll"
+    const val GET_ALL_STAFF_BUS_REQUEST = "$BASE_URL/api/staffbusrequest/getAll"
 
 }
