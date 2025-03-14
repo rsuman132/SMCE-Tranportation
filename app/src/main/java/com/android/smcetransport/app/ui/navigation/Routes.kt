@@ -50,11 +50,3 @@ data class BusRequestStatusApproveRoute(
     val id : String,
     val loginUserTypeEnum: LoginUserTypeEnum
 )
-
-@Serializable
-data class OverAllScreenRoute(
-    val departmentId : String,
-    val department : String,
-    val loginTypeEnum : LoginUserTypeEnum,
-    val yearText : String
-)

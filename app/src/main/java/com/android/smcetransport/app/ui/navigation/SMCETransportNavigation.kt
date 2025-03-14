@@ -489,14 +489,6 @@ fun SMCETransportApp(
                         }
 
                         is DepartmentActionEvent.OnSelectedYearOrStaffId -> {
-                            navController.navigate(
-                                OverAllScreenRoute(
-                                    departmentId = departmentListUIState.selectedDepartmentId ?: "",
-                                    department = departmentListUIState.selectedDepartmentName ?: "",
-                                    loginTypeEnum = event.loginUserTypeEnum,
-                                    yearText = event.selectedYearOrStaff ?: ""
-                                )
-                            )
                             departmentListViewModel.updateYearListDialog(
                                 show = false,
                                 selectedDeptId = null,
