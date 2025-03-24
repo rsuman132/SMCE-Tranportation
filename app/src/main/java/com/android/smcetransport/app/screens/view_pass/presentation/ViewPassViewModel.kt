@@ -32,7 +32,7 @@ class ViewPassViewModel(
     private fun getPassById() {
         viewModelScope.launch(IO) {
             val passId = sharedPrefs.getRequestPassModelList()?.find {
-                (it.status == RequestStatusEnum.REQUESTED.name || it.status == RequestStatusEnum.ACCEPTED.name)
+                (it.status == RequestStatusEnum.REQUESTED || it.status == RequestStatusEnum.ACCEPTED)
             }?.id
             viewPassRepositoryUseCase.getBusRequestById(passId).collectLatest { networkResult ->
                 when(networkResult) {
@@ -49,7 +49,10 @@ class ViewPassViewModel(
                     is NetworkResult.Success -> {
                         val requestData = networkResult.data?.data?.firstOrNull()
                         val titleDescList =
-                            application.baseContext.getPassList(data = requestData)
+                            application.baseContext.getPassList(
+                                data = requestData,
+                                loginUserTypeEnum = sharedPrefs.getLoginType()
+                            )
                         viewPassUiState.update {
                             it.copy(
                                 isApiLoading = false,

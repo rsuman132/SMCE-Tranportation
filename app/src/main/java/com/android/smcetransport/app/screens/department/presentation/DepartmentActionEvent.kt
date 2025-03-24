@@ -1,7 +1,5 @@
 package com.android.smcetransport.app.screens.department.presentation
 
-import com.android.smcetransport.app.core.enum.LoginUserTypeEnum
-
 sealed class DepartmentActionEvent {
 
     data object OnBackPressEvent : DepartmentActionEvent()
@@ -19,17 +17,5 @@ sealed class DepartmentActionEvent {
     data object OnAddDepartmentEventInDialog : DepartmentActionEvent()
 
     data object OnAddDepartmentDialogDismiss : DepartmentActionEvent()
-
-    data class OnStudentYearListDialogShowHideEvent(
-        val show : Boolean,
-        val selectedId : String?,
-        val selectedDepartmentName : String?
-    ) : DepartmentActionEvent()
-
-
-    data class OnSelectedYearOrStaffId(
-        val selectedYearOrStaff : String?,
-        val loginUserTypeEnum: LoginUserTypeEnum
-    ) : DepartmentActionEvent()
 
 }

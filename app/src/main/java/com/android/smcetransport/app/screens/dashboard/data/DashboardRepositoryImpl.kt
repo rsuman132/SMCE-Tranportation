@@ -56,7 +56,7 @@ class DashboardRepositoryImpl(
     ): Flow<NetworkResult<BaseApiClass<JsonObject>>> {
         val loginUserTypeEnum = sharedPrefs.getLoginType()?.name?.lowercase()
         val passId = sharedPrefs.getRequestPassModelList()?.find {
-            (it.status == RequestStatusEnum.REQUESTED.name || it.status == RequestStatusEnum.ACCEPTED.name)
+            (it.status == RequestStatusEnum.REQUESTED || it.status == RequestStatusEnum.ACCEPTED)
         }?.id
         val apiUrl = "$BASE_URL/api/${loginUserTypeEnum}busrequest/update/$passId"
         val httpStatement = ktorHttpClient.httpClientAndroid().preparePost {

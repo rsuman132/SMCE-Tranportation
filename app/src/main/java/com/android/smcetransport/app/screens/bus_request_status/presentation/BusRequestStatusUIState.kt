@@ -13,5 +13,12 @@ data class BusRequestStatusUIState(
     val isShowReasonForCancellationError : Boolean = false,
     val isCancelRequestButtonLoading : Boolean = false,
     val selectedRequestId : String? = null,
-    val selectedRequesterId : String? = null
+    val selectedRequesterId : String? = null,
+    val isShowDepartmentListDialog : Boolean = false,
+    val isShowYearListDialog : Boolean = false,
+    val studentSelectedDepartment : String = "",
+    val studentSelectedYear : String = "",
+    val staffSelectedDepartment : String = "",
+    val departmentList : List<String?> = listOf(),
+    val yearList : List<String> = listOf()
 )

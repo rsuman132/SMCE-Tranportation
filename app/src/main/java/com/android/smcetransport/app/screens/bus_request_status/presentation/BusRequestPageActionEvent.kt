@@ -28,4 +28,31 @@ sealed class BusRequestPageActionEvent {
         val loginUserTypeEnum: LoginUserTypeEnum
     ) : BusRequestPageActionEvent()
 
+
+    data class OnStudentDepartmentFilterEvent(
+        val isClear : Boolean
+    ) : BusRequestPageActionEvent()
+
+    data class OnStudentYearFilterEvent(
+        val isClear : Boolean
+    ) : BusRequestPageActionEvent()
+
+    data class OnStaffDepartmentFilterEvent(
+        val isClear : Boolean
+    ) : BusRequestPageActionEvent()
+
+    data object OnStudentFilterEvent : BusRequestPageActionEvent()
+
+    data object OnStaffFilterEvent : BusRequestPageActionEvent()
+
+    data class OnDialogDismissEvent(
+        val isDepartmentDialogDismiss : Boolean?,
+        val isYearDialogDismiss : Boolean?,
+    ) : BusRequestPageActionEvent()
+
+    data class OnSelectedDeptYearText(
+        val deptText : String?,
+        val yearText : String?
+    ) : BusRequestPageActionEvent()
+
 }

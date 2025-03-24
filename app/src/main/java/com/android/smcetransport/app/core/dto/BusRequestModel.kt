@@ -1,5 +1,6 @@
 package com.android.smcetransport.app.core.dto
 
+import com.android.smcetransport.app.core.enum.RequestStatusEnum
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -19,7 +20,7 @@ data class BusRequestModel(
     @SerialName("amount")
     val amount : Double? = null,
     @SerialName("status")
-    val status : String? = null,
+    val status : RequestStatusEnum? = null,
     @SerialName("bus_incharge_id")
     val busInchargeId : String? = null,
     @SerialName("busincharge")

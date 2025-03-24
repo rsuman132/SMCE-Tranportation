@@ -29,9 +29,7 @@ data class SuccessScreenRoute(
 )
 
 @Serializable
-data class DepartmentScreenRoute(
-    val isFromOverAllData : Boolean
-)
+data object DepartmentScreenRoute
 
 @Serializable
 data object BusListScreenRoute

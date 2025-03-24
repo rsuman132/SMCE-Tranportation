@@ -355,7 +355,7 @@ fun SMCETransportApp(
                         }
 
                         is DashboardActionEvents.OnManageDepartmentClickEvent -> {
-                            navController.navigate(DepartmentScreenRoute(isFromOverAllData = false))
+                            navController.navigate(DepartmentScreenRoute)
                         }
 
                         is DashboardActionEvents.OnManageBusClickEvent -> {
@@ -444,16 +444,11 @@ fun SMCETransportApp(
         composable<DepartmentScreenRoute> {
             val departmentListViewModel : DepartmentListViewModel = koinViewModel()
             val departmentListUIState by departmentListViewModel.departmentListUIState.collectAsState()
-            val departScreenRoute = it.toRoute<DepartmentScreenRoute>()
 
             LaunchedEffect(Unit) {
                 departmentListViewModel.errorMessage.collectLatest { msg ->
                     context.showToast(msg)
                 }
-            }
-
-            LaunchedEffect(Unit) {
-                departmentListViewModel.updateIsFromOverAllData(departScreenRoute.isFromOverAllData)
             }
 
             DepartmentListScreen(
@@ -478,22 +473,6 @@ fun SMCETransportApp(
                         }
                         is DepartmentActionEvent.OnAddDepartmentDialogDismiss -> {
                             departmentListViewModel.updateDepartmentDialog(false)
-                        }
-
-                        is DepartmentActionEvent.OnStudentYearListDialogShowHideEvent -> {
-                            departmentListViewModel.updateYearListDialog(
-                                show = event.show,
-                                selectedDeptId = event.selectedId,
-                                selectedDepartmentName = event.selectedDepartmentName
-                            )
-                        }
-
-                        is DepartmentActionEvent.OnSelectedYearOrStaffId -> {
-                            departmentListViewModel.updateYearListDialog(
-                                show = false,
-                                selectedDeptId = null,
-                                selectedDepartmentName = null
-                            )
                         }
                     }
                 }
@@ -680,6 +659,58 @@ fun SMCETransportApp(
                                     loginUserTypeEnum = it.loginUserTypeEnum
                                 )
                             )
+                        }
+
+                        is BusRequestPageActionEvent.OnStaffDepartmentFilterEvent -> {
+                            if (it.isClear) {
+                                busRequestStatusViewModel.updateStudentStaffDeptSelectedYear("")
+                            } else {
+                                busRequestStatusViewModel.updateDepartmentListDialogShow(true)
+                            }
+                        }
+
+                        is BusRequestPageActionEvent.OnStaffFilterEvent -> {
+                            busRequestStatusViewModel.applyFilterForStaff()
+                        }
+
+                        is BusRequestPageActionEvent.OnStudentDepartmentFilterEvent -> {
+                            if (it.isClear) {
+                                busRequestStatusViewModel.updateStudentStaffDeptSelectedYear("")
+                            } else {
+                                busRequestStatusViewModel.updateDepartmentListDialogShow(true)
+                            }
+                        }
+
+                        is BusRequestPageActionEvent.OnStudentFilterEvent -> {
+                            busRequestStatusViewModel.applyFilterForStudent()
+                        }
+
+                        is BusRequestPageActionEvent.OnStudentYearFilterEvent -> {
+                            if (it.isClear) {
+                                busRequestStatusViewModel.updateStudentSelectedYear("")
+                            } else {
+                                busRequestStatusViewModel.updateYearListDialogShow(true)
+                            }
+                        }
+
+                        is BusRequestPageActionEvent.OnDialogDismissEvent -> {
+                            if (it.isYearDialogDismiss != null) {
+                                busRequestStatusViewModel.updateYearListDialogShow(it.isYearDialogDismiss)
+                            }
+                            if (it.isDepartmentDialogDismiss != null) {
+                                busRequestStatusViewModel.updateDepartmentListDialogShow(it.isDepartmentDialogDismiss)
+                            }
+                        }
+
+                        is BusRequestPageActionEvent.OnSelectedDeptYearText -> {
+                            if (it.yearText != null) {
+                                busRequestStatusViewModel.updateStudentSelectedYear(it.yearText)
+                                busRequestStatusViewModel.updateYearListDialogShow(false)
+                            }
+                            if(it.deptText != null) {
+                                busRequestStatusViewModel.updateStudentStaffDeptSelectedYear(it.deptText)
+                                busRequestStatusViewModel.updateDepartmentListDialogShow(false)
+                            }
                         }
                     }
                 }

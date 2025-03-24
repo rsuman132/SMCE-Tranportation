@@ -36,6 +36,7 @@ import com.android.smcetransport.app.ui.theme.theme.theme.semiBoldFont
 fun BusStatusItemView(
     modifier: Modifier = Modifier,
     userName : String,
+    statusText : String?,
     userId : String?,
     userImageUrl : String?,
     userDepartment : String,
@@ -44,7 +45,7 @@ fun BusStatusItemView(
     busNo : String?,
     busViaRoute : String?,
     pickUpPoint : String,
-    requestStatus : String?,
+    requestStatus : RequestStatusEnum?,
     onCancelClick : () -> Unit,
     onApproveClick : () -> Unit
 ) {
@@ -63,7 +64,7 @@ fun BusStatusItemView(
         userDepartment
     }
 
-    val acceptDeclareText = if (requestStatus == RequestStatusEnum.ACCEPTED.name) {
+    val acceptDeclareText = if (requestStatus == RequestStatusEnum.ACCEPTED) {
         stringResource(R.string.edit_text)
     } else {
         stringResource(R.string.approve_text)
@@ -133,6 +134,13 @@ fun BusStatusItemView(
         }
 
         Text(
+            text = "${stringResource(R.string.status_text)}: $statusText",
+            fontSize = 16.sp,
+            fontFamily = FontFamily(mediumFont),
+            color = colorResource(R.color.black)
+        )
+
+        Text(
             text = "${stringResource(R.string.start_point_text)}: $pickUpPoint",
             fontSize = 16.sp,
             fontFamily = FontFamily(mediumFont),
@@ -157,7 +165,7 @@ fun BusStatusItemView(
             )
         }
 
-        if (requestStatus?.lowercase() != RequestStatusEnum.CANCELLED.name.lowercase()) {
+        if (requestStatus != RequestStatusEnum.CANCELLED) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -222,6 +230,7 @@ fun PreviewBusStatusItemView() {
     BusStatusItemView(
         modifier = Modifier.fillMaxWidth(),
         userName = "Suman R",
+        statusText = "Accepted",
         userId = "SMCE 123456",
         userImageUrl = null,
         userDepartment = "Mechanic",
@@ -230,7 +239,7 @@ fun PreviewBusStatusItemView() {
         busNo = "1",
         busViaRoute = "Via Thuckalay",
         pickUpPoint = "Marthandam",
-        requestStatus = RequestStatusEnum.REQUESTED.name,
+        requestStatus = RequestStatusEnum.REQUESTED,
         onApproveClick = {
 
         },

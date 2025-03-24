@@ -242,7 +242,7 @@ class DashboardViewModel(
 
     val requestingRequestModel get() =
         sharedPrefs.getRequestPassModelList()?.find {
-            (it.status == RequestStatusEnum.REQUESTED.name || it.status == RequestStatusEnum.ACCEPTED.name)
+            (it.status == RequestStatusEnum.REQUESTED || it.status == RequestStatusEnum.ACCEPTED)
         }
 
 

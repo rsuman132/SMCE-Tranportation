@@ -156,25 +156,4 @@ class DepartmentListViewModel(
     }
 
 
-    fun updateIsFromOverAllData(isFromOverAllData : Boolean) {
-        departmentListUIState.update {
-            it.copy(isFromOverAllData = isFromOverAllData)
-        }
-    }
-
-
-    fun updateYearListDialog(
-        show : Boolean,
-        selectedDeptId : String?,
-        selectedDepartmentName : String?
-    ) {
-        departmentListUIState.update {
-            it.copy(
-                showYearAndStaffDialog = show,
-                selectedDepartmentId = selectedDeptId,
-                selectedDepartmentName = selectedDepartmentName
-            )
-        }
-    }
-
 }
