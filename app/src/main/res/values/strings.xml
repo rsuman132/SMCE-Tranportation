@@ -113,6 +113,14 @@
     <string name="amount_text">Amount</string>
     <string name="status_text">Status</string>
     <string name="year_text">Year</string>
+    <string name="college_name_text">Stella Mary\'s College Of Engineering</string>
+    <string name="college_address_text">Aruthenganvilai, Kalluketti Junction, Azhikkal Rd, Tamil Nadu 629202</string>
+    <string name="bus_pass_text">Bus Pass</string>
+    <string name="print_text">Print</string>
+    <string name="home_text">Home</string>
+    <string name="signature_of_text">Signature of</string>
+    <string name="transport_in_charge_text">Transport in-Charge</string>
+    <string name="principal_text">Principal</string>
 
 
     <!-- Request Status Screen -->

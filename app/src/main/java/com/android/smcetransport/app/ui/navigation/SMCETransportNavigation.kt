@@ -46,6 +46,7 @@ import com.android.smcetransport.app.screens.splash.presenter.SplashScreen
 import com.android.smcetransport.app.screens.splash.presenter.SplashScreenViewModel
 import com.android.smcetransport.app.screens.view_pass.presentation.ViewPassScreen
 import com.android.smcetransport.app.screens.view_pass.presentation.ViewPassViewModel
+import com.android.smcetransport.app.screens.view_pass.presentation.utils.Extensions.openPdfFile
 import com.android.smcetransport.app.screens.walkthrough.WalkThroughActionEvent
 import com.android.smcetransport.app.screens.walkthrough.WalkThroughScreen
 import com.android.smcetransport.app.screens.walkthrough.WalkThroughViewModel
@@ -600,6 +601,14 @@ fun SMCETransportApp(
                 viewPassUiState = viewPassUiState,
                 onBackPressEvent = {
                     navController.navigateUp()
+                },
+                onPrintPressEvent = { picture ->
+                    viewPassViewModel.generateFileAndOpenPdfPage(
+                        picture = picture,
+                        onFileResponse = {
+                            context.openPdfFile(it ?: return@generateFileAndOpenPdfPage)
+                        }
+                    )
                 }
             )
         }

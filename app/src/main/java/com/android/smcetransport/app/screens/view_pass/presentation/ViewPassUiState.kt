@@ -6,5 +6,6 @@ data class ViewPassUiState(
     val isApiLoading: Boolean = false,
     val titleDescList : List<TitleDescModel> = listOf(),
     val errorText : String? = null,
-    val userImage : String = ""
+    val userImage : String = "",
+    val isPrintButtonLoading : Boolean = false
 )

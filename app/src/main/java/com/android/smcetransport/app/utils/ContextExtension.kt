@@ -31,9 +31,6 @@ object ContextExtension {
             } else {
                 notSetText
             }
-            val requestStatusEnum = RequestStatusEnum.entries.find { it == data.status }
-            val requestedStatusEnumToString =
-                this.requestStatusEnumToString(requestStatusEnum)
             val nameModel = TitleDescModel(
                 id = "1",
                 title = resources.getString(R.string.name_text),
@@ -43,11 +40,6 @@ object ContextExtension {
                 id = "2",
                 title = resources.getString(R.string.college_id),
                 descText = "${data.requesterUserModel?.collegeOrStaffId}"
-            )
-            val phoneNumberModel = TitleDescModel(
-                id = "3",
-                title = resources.getString(R.string.phone_number_text),
-                descText = "${data.requesterUserModel?.phone}"
             )
             val departmentModel = TitleDescModel(
                 id = "4",
@@ -79,34 +71,26 @@ object ContextExtension {
                 title = resources.getString(R.string.amount_text),
                 descText = amountText
             )
-            val statusModel = TitleDescModel(
-                id = "10",
-                title = resources.getString(R.string.status_text),
-                descText = requestedStatusEnumToString ?: notSetText
-            )
             if (loginUserTypeEnum == LoginUserTypeEnum.STUDENT) {
                 listOf(
-                    nameModel,
-                    collegeIdModel,
-                    phoneNumberModel,
-                    departmentModel,
-                    yearModel,
                     busNoModel,
+                    nameModel,
+                    departmentModel,
+                    collegeIdModel,
+                    yearModel,
                     startPointModel,
                     viaRouteModel,
-                    amountModel,
-                    statusModel
+                    amountModel
                 )
             } else {
                 listOf(
-                    nameModel,
-                    phoneNumberModel,
-                    departmentModel,
                     busNoModel,
+                    nameModel,
+                    departmentModel,
+                    yearModel,
                     startPointModel,
                     viaRouteModel,
-                    amountModel,
-                    statusModel
+                    amountModel
                 )
             }
         } else {
